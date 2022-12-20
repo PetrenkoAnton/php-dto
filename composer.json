@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Src\\": "src"
+      "Dto\\": "src"
     }
   },
   "autoload-dev": {
