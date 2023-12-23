@@ -4,19 +4,12 @@ declare(strict_types=1);
 
 namespace Dto;
 
-class DtoCollection extends Collection implements ArrayableInterface
+use Dto\Common\Collection;
+
+abstract class DtoCollection extends Collection
 {
-    public function __construct(array $items = [], string $entityClass = DtoInterface::class)
+    public function add(DtoInterface $dto): void
     {
-        if ($entityClass !== DtoInterface::class && !\is_subclass_of($entityClass, DtoInterface::class)) {
-            throw new \InvalidArgumentException('Class must implement DtoInterface');
-        }
-
-        parent::__construct($entityClass, $items);
-    }
-
-    public function toArray(): array
-    {
-        return \array_map(static fn(ArrayableInterface $dto) => $dto->toArray(), $this->items);
+        $this->items[] = $dto;
     }
 }

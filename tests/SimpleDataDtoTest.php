@@ -6,7 +6,7 @@ namespace Test;
 
 use Dto\Exception\GetValueException;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\SimpleDataDto;
+use Tests\Fixtures\FirstSimpleDataDto;
 
 class SimpleDataDtoTest extends TestCase
 {
@@ -15,7 +15,7 @@ class SimpleDataDtoTest extends TestCase
     private readonly string $stringTwo;
     private readonly array $arrayOne;
     private readonly array $arrayTwo;
-    private readonly SimpleDataDto $dto;
+    private readonly FirstSimpleDataDto $dto;
 
     public function setUp(): void
     {
@@ -33,7 +33,7 @@ class SimpleDataDtoTest extends TestCase
             'arrayTwo' => $this->arrayTwo,
         ];
 
-        $this->dto = new SimpleDataDto($data);
+        $this->dto = new FirstSimpleDataDto($data);
 
     }
 

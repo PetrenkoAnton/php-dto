@@ -13,7 +13,7 @@ use Dto\Dto;
  * @method array getArrayOne()
  * @method array getArrayTwo()
  */
-class SimpleDataDto extends Dto
+class FirstSimpleDataDto extends Dto
 {
     protected bool $bool;
     protected string $stringOne;

@@ -127,9 +127,6 @@ abstract class Dto implements DtoInterface
     private function setBuiltinType(string $typeName, string $propertyName, mixed $value): void
     {
         if ($typeName === 'array' && !\is_array($value)) {
-            var_dump($value);
-            die;
-
             $this->{$propertyName} = [];
             return;
         }
