@@ -48,23 +48,32 @@ abstract class Dto implements DtoInterface
     protected function resolveExpectedProperty(string $method): string
     {
         if (\str_starts_with($method, 'is')) {
-            var_dump(777);
-            die;
+            $expectedProperty = \lcfirst(\substr($method, 2));
+
+            return $this->_getExpectedProperty($expectedProperty, $method);
         }
 
         if (\str_starts_with($method, 'get')) {
             $expectedProperty = \lcfirst(\substr($method, 3));
 
-            foreach ($this->properties as $property) {
-                if ($property->getName() === $expectedProperty)
-                    return $expectedProperty;
-            }
-
-            throw new \InvalidArgumentException("Unexpected method name: {$method}");
+            return $this->_getExpectedProperty($expectedProperty, $method);
         }
 
+        // TODO! Temporary handler. Delete before production ready
         var_dump(666);
         die;
+
+        throw new \InvalidArgumentException("Unexpected method name: {$method}");
+    }
+
+    private function _getExpectedProperty(string $expectedProperty, string $method): string
+    {
+        foreach ($this->properties as $property) {
+            if ($property->getName() === $expectedProperty)
+                return $expectedProperty;
+        }
+
+        throw new \InvalidArgumentException("Unexpected method name: {$method}");
     }
 
     ////
@@ -118,9 +127,13 @@ abstract class Dto implements DtoInterface
     private function setBuiltinType(string $typeName, string $propertyName, mixed $value): void
     {
         if ($typeName === 'array' && !\is_array($value)) {
+            var_dump($value);
+            die;
+
             $this->{$propertyName} = [];
             return;
         }
+
         \settype($value, $typeName);
         $this->{$propertyName} = $value;
     }
@@ -202,10 +215,5 @@ abstract class Dto implements DtoInterface
     protected function normalizeKey(string $key): string
     {
         return \lcfirst(\str_replace('_', '', \ucwords($key, '_')));
-    }
-
-    public function jsonSerialize(): mixed
-    {
-        return $this->toArray();
     }
 }

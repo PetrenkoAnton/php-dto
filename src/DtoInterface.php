@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Dto;
 
-interface DtoInterface extends \JsonSerializable
+interface DtoInterface
 {
 }
