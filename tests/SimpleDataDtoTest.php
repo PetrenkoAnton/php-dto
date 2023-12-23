@@ -25,7 +25,7 @@ class SimpleDataDtoTest extends TestCase
         $this->arrayOne = ['key_1' => 'value_1', 'key_2' => 'value_2'];
         $this->arrayTwo = ['key_3' => 'value_3', 'key_4' => 'value_4'];
 
-        $simpleData = [
+        $data = [
             'bool' => $this->bool,
             'stringOne' => $this->stringOne,
             'stringTwo' => $this->stringTwo,
@@ -33,7 +33,7 @@ class SimpleDataDtoTest extends TestCase
             'arrayTwo' => $this->arrayTwo,
         ];
 
-        $this->dto = new SimpleDataDto($simpleData);
+        $this->dto = new SimpleDataDto($data);
 
     }
 
