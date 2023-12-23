@@ -7,7 +7,7 @@
         verbose="true"
         stopOnFailure="false">
     <testsuites>
-        <testsuite name="unit">
+        <testsuite name="tests">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>

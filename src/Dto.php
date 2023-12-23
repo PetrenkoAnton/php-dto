@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dto;
 
+use Dto\Exception\GetValueException;
 use Dto\Exception\SetValueException;
 
 abstract class Dto implements DtoInterface
@@ -33,27 +34,37 @@ abstract class Dto implements DtoInterface
         }
     }
 
-    public function __call(string $name, array $arguments): void
+    public function __call(string $name, array $arguments): mixed
     {
-        $property = $this->resolveProperty($name);
-        var_dump($property);
-        die;
+        try {
+            $property = $this->resolveExpectedProperty($name);
+        } catch (\InvalidArgumentException $e) {
+            throw new GetValueException($this::class, $name, $e);
+        }
+
+        return $this->$property;
     }
 
-    protected function resolveProperty(string $method): string
+    protected function resolveExpectedProperty(string $method): string
     {
-        $key = $this->normalizeKey($key);
-
-        if (\str_starts_with($key, 'is') && \method_exists($this, $key)) {
-            return $key;
+        if (\str_starts_with($method, 'is')) {
+            var_dump(777);
+            die;
         }
 
-        $accessor = 'is' . \ucfirst($key);
-        if (\method_exists($this, $accessor)) {
-            return $accessor;
+        if (\str_starts_with($method, 'get')) {
+            $expectedProperty = \lcfirst(\substr($method, 3));
+
+            foreach ($this->properties as $property) {
+                if ($property->getName() === $expectedProperty)
+                    return $expectedProperty;
+            }
+
+            throw new \InvalidArgumentException("Unexpected method name: {$method}");
         }
 
-        return 'get' . \ucfirst($key);
+        var_dump(666);
+        die;
     }
 
     ////

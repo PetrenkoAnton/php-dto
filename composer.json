@@ -1,5 +1,5 @@
 {
-  "name": "petrenkoanton/php-dto",
+  "name": "petrenkoanton/php82-dto",
   "description": "",
   "minimum-stability": "stable",
   "license": "proprietary",
@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": "^8.0"
+    "php": "^8.2"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0"
