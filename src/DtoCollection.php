@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dto;
 
 use Dto\Common\Collection;
-use Dto\Exception\SetValueException;
+use Dto\Exception\AddDtoCollectionException;
 use ReflectionClass;
 
 abstract class DtoCollection extends Collection
@@ -18,7 +18,7 @@ abstract class DtoCollection extends Collection
     }
 
     /**
-     * @throws SetValueException
+     * @throws AddDtoCollectionException
      */
     public function add(DtoInterface $dto): void
     {
@@ -28,13 +28,13 @@ abstract class DtoCollection extends Collection
     }
 
     /**
-     * @throws SetValueException
+     * @throws AddDtoCollectionException
      */
     private function validate(DtoInterface $dto): void
     {
         $expectedDto = (new ReflectionClass($this))->getConstructor()->getParameters()[0]->getType()->getName();
 
         if ($expectedDto !== $dto::class)
-            throw new SetValueException($this::class, $expectedDto, $dto::class);
+            throw new AddDtoCollectionException($this::class, $expectedDto, $dto::class);
     }
 }

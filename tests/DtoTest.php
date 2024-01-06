@@ -4,68 +4,57 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Dto\Exception\SetValueException;
 use Dto\Exception\GetValueException;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\FirstSimpleDataDto;
+use Tests\Fixtures\PersonDto;
 
 class DtoTest extends TestCase
 {
-    private readonly bool $bool;
-    private readonly string $stringOne;
-    private readonly string $stringTwo;
-    private readonly array $arrayOne;
-    private readonly array $arrayTwo;
-    private readonly FirstSimpleDataDto $dto;
+    private readonly string $name;
+    private readonly int $age;
+    private readonly PersonDto $dto;
 
+    /**
+     * @throws SetValueException
+     */
     public function setUp(): void
     {
-        $this->bool = true;
-        $this->stringOne = 'StringOne';
-        $this->stringTwo = 'StringTwo';
-        $this->arrayOne = ['key_1' => 'value_1', 'key_2' => 'value_2'];
-        $this->arrayTwo = ['key_3' => 'value_3', 'key_4' => 'value_4'];
+        [$this->name, $this->age] = ['Alice', 25];
 
         $data = [
-            'bool' => $this->bool,
-            'stringOne' => $this->stringOne,
-            'stringTwo' => $this->stringTwo,
-            'arrayOne' => $this->arrayOne,
-            'arrayTwo' => $this->arrayTwo,
+            'name' => $this->name,
+            'age' => $this->age,
         ];
 
-        $this->dto = new FirstSimpleDataDto($data);
-
+        $this->dto = new PersonDto($data);
     }
 
     /**
-     * @test
      * @group ok
      */
-    public function testSuccess(): void
+    public function testGetValueSuccess(): void
     {
-        $this->assertEquals($this->bool, $this->dto->isBool());
-        $this->assertEquals($this->stringOne, $this->dto->getStringOne());
-        $this->assertEquals($this->stringTwo, $this->dto->getStringTwo());
-        $this->assertEquals($this->arrayOne, $this->dto->getArrayOne());
-        $this->assertEquals($this->arrayTwo, $this->dto->getArrayTwo());
+        $this->assertEquals($this->name, $this->dto->getName());
+        $this->assertEquals($this->age, $this->dto->getAge());
     }
 
     /**
-     * @test
      * @group ok
+     * @dataProvider dpInvalidGetter
      */
-    public function testInvalidGetterThrowsException(): void
+    public function testGetInvalidValueThrowsException(string $getter): void
     {
         $this->expectException(GetValueException::class);
-        $this->dto->getStringThree();
+        $this->dto->$getter();
+    }
 
-        $this->expectException(GetValueException::class);
-        $this->dto->getStringFour();
-
-        $this->expectException(GetValueException::class);
-        $this->dto->getArrayThree();
-
-        $this->expectException(GetValueException::class);
-        $this->dto->getArrayFour();
+    public static function dpInvalidGetter(): array
+    {
+        return [
+            ['getPrice'],
+            ['getType'],
+            ['isAvailable'],
+        ];
     }
 }

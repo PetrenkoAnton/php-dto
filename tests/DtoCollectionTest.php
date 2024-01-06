@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Dto\Exception\AddDtoCollectionException;
 use Dto\Exception\SetValueException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
@@ -22,8 +23,13 @@ class DtoCollectionTest extends TestCase
     public function setUp(): void
     {
         [$this->aliceName, $this->aliceAge] = ['Alice', 25];
+
+        $aliceData = [
+            'name' => $this->aliceName,
+            'age' => $this->aliceAge,
+        ];
         
-        $this->aliceDto = new PersonDto(['name' => $this->aliceName, 'age' => $this->aliceAge]);
+        $this->aliceDto = new PersonDto($aliceData);
     }
 
     /**
@@ -32,11 +38,18 @@ class DtoCollectionTest extends TestCase
      */
     public function testAddMethodSuccess(): void
     {
-        [$bobName, $ageBob] = ['Bob', 30];
-        [$samName, $samAge] = ['Sam', 35];
+        $bobData = [
+            'name' => $bobName = 'Bob',
+            'age' => $bobAge = 30,
+        ];
 
-        $bobDto = new PersonDto(['name' => $bobName, 'age' => $ageBob]);
-        $samDto = new PersonDto(['name' => $samName, 'age' => $samAge]);
+        $samData = [
+            'name' => $samName = 'Sam',
+            'age' => $samAge = 35,
+        ];
+
+        $bobDto = new PersonDto($bobData);
+        $samDto = new PersonDto($samData);
 
         $dtoCollection = new PersonDtoCollection($this->aliceDto);
         $dtoCollection->add($bobDto);
@@ -51,7 +64,7 @@ class DtoCollectionTest extends TestCase
         $this->assertEquals($this->aliceAge, $dtoCollection->getItem(0)->getAge());
 
         $this->assertEquals($bobName, $dtoCollection->getItem(1)->getName());
-        $this->assertEquals($ageBob, $dtoCollection->getItem(1)->getAge());
+        $this->assertEquals($bobAge, $dtoCollection->getItem(1)->getAge());
 
         $this->assertEquals($samName, $dtoCollection->getItem(2)->getName());
         $this->assertEquals($samAge, $dtoCollection->getItem(2)->getAge());
@@ -63,13 +76,7 @@ class DtoCollectionTest extends TestCase
      */
     public function testAddMethodThrowsException(): void
     {
-        [$price, $type, $available] = [999, 'ticket', true];
-
-        $productDto = new ProductDto([
-            'price' => $price,
-            'type' => $type,
-            'available' => $available,
-        ]);
+        $productDto = new ProductDto([]);
 
         $dtoCollection = new PersonDtoCollection();
         $dtoCollection->add($this->aliceDto);
@@ -83,7 +90,7 @@ class DtoCollectionTest extends TestCase
             ProductDto::class,
         );
 
-        $this->expectException(SetValueException::class);
+        $this->expectException(AddDtoCollectionException::class);
         $this->expectExceptionMessage($msg);
         $dtoCollection->add($productDto);
     }

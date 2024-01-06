@@ -7,11 +7,11 @@ namespace Tests\Fixtures;
 use Dto\Dto;
 
 /**
- * @method int getAge()
  * @method string getName()
+ * @method int getAge()
  */
 class PersonDto extends Dto
 {
-    protected int $age;
     protected string $name;
+    protected int $age;
 }
