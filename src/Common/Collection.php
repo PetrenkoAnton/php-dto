@@ -8,8 +8,6 @@ abstract class Collection implements CollectionInterface, \Countable
 {
     protected array $items = [];
 
-    abstract public function __construct();
-
     public function filter(callable $callback): Collection
     {
         $copy = clone $this;
@@ -21,6 +19,11 @@ abstract class Collection implements CollectionInterface, \Countable
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    public function getItem(int $key): mixed
+    {
+        return $this->items[$key] ?? null;
     }
 
     public function first(): mixed

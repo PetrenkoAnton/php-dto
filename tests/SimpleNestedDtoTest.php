@@ -37,7 +37,7 @@ class SimpleNestedDtoTest extends TestCase
 
     /**
      * @test
-     * @group +
+     * @group ok
      */
     public function testSuccess(): void
     {
