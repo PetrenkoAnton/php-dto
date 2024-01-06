@@ -4,97 +4,87 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\DtoCollection;
 use Dto\Exception\SetValueException;
-use Dto\Exception\SetValueException\InvalidAddMethodArgument;
-use Dto\Exception\SetValueException\InvalidConstructorVariadicParams;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\PersonDtoCollection;
+use Tests\Fixtures\ProductDto;
 
 class DtoCollectionTest extends TestCase
 {
+    private readonly int $aliceAge;
+    private readonly string $aliceName;
+    private readonly PersonDto $aliceDto;
+
+    /**
+     * @throws SetValueException
+     */
+    public function setUp(): void
+    {
+        [$this->aliceName, $this->aliceAge] = ['Alice', 25];
+        
+        $this->aliceDto = new PersonDto(['name' => $this->aliceName, 'age' => $this->aliceAge]);
+    }
+
     /**
      * @group ok
      * @throws SetValueException
      */
     public function testAddMethodSuccess(): void
     {
-        [$nameAlice, $ageAlice] = ['Alice', 25];
-        [$nameBob, $ageBob] = ['Bob', 30];
-        [$nameSam, $ageSam] = ['Sam', 35];
+        [$bobName, $ageBob] = ['Bob', 30];
+        [$samName, $samAge] = ['Sam', 35];
 
-        $dtoAlice = new PersonDto(['name' => $nameAlice, 'age' => $ageAlice]);
-        $dtoBob = new PersonDto(['name' => $nameBob, 'age' => $ageBob]);
-        $dtoSam = new PersonDto(['name' => $nameSam, 'age' => $ageSam]);
+        $bobDto = new PersonDto(['name' => $bobName, 'age' => $ageBob]);
+        $samDto = new PersonDto(['name' => $samName, 'age' => $samAge]);
 
-        $dtoCollection = new PersonDtoCollection($dtoAlice);
-        $dtoCollection->add($dtoBob);
-        $dtoCollection->add($dtoSam);
+        $dtoCollection = new PersonDtoCollection($this->aliceDto);
+        $dtoCollection->add($bobDto);
+        $dtoCollection->add($samDto);
 
         $this->assertCount(3, $dtoCollection);
 
-        $this->assertEquals($nameAlice, $dtoCollection->first()->getName());
-        $this->assertEquals($ageAlice, $dtoCollection->first()->getAge());
+        $this->assertEquals($this->aliceName, $dtoCollection->first()->getName());
+        $this->assertEquals($this->aliceAge, $dtoCollection->first()->getAge());
 
-        $this->assertEquals($nameAlice, $dtoCollection->getItem(0)->getName());
-        $this->assertEquals($ageAlice, $dtoCollection->getItem(0)->getAge());
+        $this->assertEquals($this->aliceName, $dtoCollection->getItem(0)->getName());
+        $this->assertEquals($this->aliceAge, $dtoCollection->getItem(0)->getAge());
 
-        $this->assertEquals($nameBob, $dtoCollection->getItem(1)->getName());
+        $this->assertEquals($bobName, $dtoCollection->getItem(1)->getName());
         $this->assertEquals($ageBob, $dtoCollection->getItem(1)->getAge());
 
-        $this->assertEquals($nameSam, $dtoCollection->getItem(2)->getName());
-        $this->assertEquals($ageSam, $dtoCollection->getItem(2)->getAge());
+        $this->assertEquals($samName, $dtoCollection->getItem(2)->getName());
+        $this->assertEquals($samAge, $dtoCollection->getItem(2)->getAge());
     }
 
     /**
      * @group ok
      * @throws SetValueException
-     * @dataProvider dp
      */
-    public function testAddMethodThrowsInvalidAddMethodArgumentException(mixed $data): void
+    public function testAddMethodThrowsException(): void
     {
+        [$price, $type, $available] = [999, 'ticket', true];
+
+        $productDto = new ProductDto([
+            'price' => $price,
+            'type' => $type,
+            'available' => $available,
+        ]);
+
         $dtoCollection = new PersonDtoCollection();
+        $dtoCollection->add($this->aliceDto);
 
-        $this->expectException(InvalidAddMethodArgument::class);
-        $dtoCollection->add($data);
-    }
+        $this->assertCount(1, $dtoCollection);
 
-    /**
-     * @group +
-     * @dataProvider dp
-     */
-    public function testAddMethodThrowsInvalidConstructorVariadicParamsException(mixed $data): void
-    {
-        $this->expectException(InvalidConstructorVariadicParams::class);
-        new class($data) extends DtoCollection {
-            public function __construct(mixed $item)
-            {
-                parent::__construct();
-            }
-        };
-    }
+        $msg = \sprintf(
+            'DtoCollection: %s | Expected Dto: %s | Given Dto: %s',
+            PersonDtoCollection::class,
+            PersonDto::class,
+            ProductDto::class,
+        );
 
-    public static function dp(): array
-    {
-        return [
-            [null],
-            [true],
-            [false],
-            [-1],
-            [0],
-            [1],
-            [1234],
-            [1.0002],
-            [''],
-            ['random string'],
-            [[]],
-            [[1]],
-            [['a' => 'b']],
-            [new StdClass()],
-            [(object)['']],
-            [(object)[1]],
-        ];
+        $this->expectException(SetValueException::class);
+        $this->expectExceptionMessage($msg);
+        $dtoCollection->add($productDto);
     }
 }

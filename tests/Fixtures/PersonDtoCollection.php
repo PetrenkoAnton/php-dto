@@ -10,7 +10,6 @@ class PersonDtoCollection extends DtoCollection
 {
     public function __construct(PersonDto ...$items)
     {
-        $this->items = $items;
-        parent::__construct();
+        parent::__construct(...$items);
     }
 }

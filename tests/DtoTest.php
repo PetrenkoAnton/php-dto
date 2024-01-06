@@ -8,7 +8,7 @@ use Dto\Exception\GetValueException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\FirstSimpleDataDto;
 
-class SimpleDataDtoTest extends TestCase
+class DtoTest extends TestCase
 {
     private readonly bool $bool;
     private readonly string $stringOne;
