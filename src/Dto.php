@@ -77,6 +77,11 @@ abstract class Dto implements DtoInterface
         return $data;
     }
 
+    protected function enableEmpty(): bool
+    {
+        return false;
+    }
+
     /**
      * @throws DeclarationException
      */
