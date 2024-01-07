@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dto\Exception;
 
-class AddDtoCollectionException extends \Exception
+class AddDtoException extends \Exception
 {
     public function __construct(string $dtoCollection, string $expectedDto, string $givenDto)
     {

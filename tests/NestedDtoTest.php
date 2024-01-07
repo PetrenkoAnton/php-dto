@@ -62,7 +62,7 @@ class NestedDtoTest extends TestCase
     }
 
     /**
-     * @group +
+     * @group ok
      */
     public function testGetValueSuccess(): void
     {

@@ -70,6 +70,11 @@ abstract class Dto implements DtoInterface
         return $data;
     }
 
+    protected function isPartially(): bool
+    {
+        return false;
+    }
+    
     protected function resolveExpectedProperty(string $method): string
     {
         if (\str_starts_with($method, 'is')) {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\AddDtoCollectionException;
+use Dto\Exception\AddDtoException;
 use Dto\Exception\SetValueException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
@@ -90,7 +90,7 @@ class DtoCollectionTest extends TestCase
             ProductDto::class,
         );
 
-        $this->expectException(AddDtoCollectionException::class);
+        $this->expectException(AddDtoException::class);
         $this->expectExceptionMessage($msg);
         $dtoCollection->add($productDto);
     }
