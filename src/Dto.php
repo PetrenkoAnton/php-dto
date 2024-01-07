@@ -11,6 +11,7 @@ use Dto\Exception\DeclarationExceptions\NoTypeDeclarationException;
 use Dto\Exception\DeclarationExceptions\NullableDeclarationException;
 use Dto\Exception\DeclarationExceptions\ObjectDeclarationException;
 use Dto\Exception\GetValueException;
+use Dto\Exception\InputDataException;
 use Dto\Exception\SetValueException;
 use ReflectionClass;
 use ReflectionException;
@@ -26,6 +27,7 @@ abstract class Dto implements DtoInterface
     /**
      * @throws DeclarationException
      * @throws SetValueException
+     * @throws InputDataException
      */
     public function __construct(array $data)
     {
@@ -33,6 +35,10 @@ abstract class Dto implements DtoInterface
 
         foreach ($this->properties as $property) {
             $name = $property->getName();
+
+            if (!key_exists($name, $data))
+                throw new InputDataException($this::class, $name);
+
             $type = $property->getType();
             $value = $data[$name] ?? null;
 
@@ -77,11 +83,6 @@ abstract class Dto implements DtoInterface
         return $data;
     }
 
-    protected function enableEmpty(): bool
-    {
-        return false;
-    }
-
     /**
      * @throws DeclarationException
      */
@@ -100,7 +101,7 @@ abstract class Dto implements DtoInterface
             throw new ObjectDeclarationException($this::class, $property->getName());
     }
 
-    protected function resolveExpectedProperty(string $method): string
+    private function resolveExpectedProperty(string $method): string
     {
         if (\str_starts_with($method, 'is')) {
             $expectedProperty = \lcfirst(\substr($method, 2));
@@ -134,7 +135,7 @@ abstract class Dto implements DtoInterface
     /**
      * @throws ReflectionException
      */
-    protected function setValue(\ReflectionType $propertyType, string $propertyName, mixed $value): void
+    private function setValue(\ReflectionType $propertyType, string $propertyName, mixed $value): void
     {
         /** @var string $typeName */
         $typeName = $propertyType->getName();
@@ -167,6 +168,8 @@ abstract class Dto implements DtoInterface
             return;
         }
 
+        // TODO!
+        // \settype($value, $typeName);
         $this->{$propertyName} = $value;
     }
 
