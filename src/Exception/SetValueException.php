@@ -6,14 +6,16 @@ namespace Dto\Exception;
 
 class SetValueException extends \Exception
 {
-    public function __construct(string $dto, string $property, string $value)
+    public function __construct(string $dto, string $property, string $expectedType, string $givenType,  mixed $value)
     {
         parent::__construct(
             \sprintf(
-                "Dto: %s | Property: %s | Value: %s",
+                "Dto: %s | Property: %s | Expected type: %s | Given type: %s | Value: %s",
                 $dto,
                 $property,
-                $value,
+                $expectedType,
+                $givenType,
+                json_encode($value),
             )
         );
     }

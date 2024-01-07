@@ -34,7 +34,7 @@ abstract class Dto implements DtoInterface
             try {
                 $this->setValue($type, $name, $value);
             } catch (\Throwable) {
-                throw new SetValueException($this::class, $name, (string)$value);
+                throw new SetValueException($this::class, $name, $type->getName(), gettype($value), $value);
             }
         }
     }
@@ -70,11 +70,6 @@ abstract class Dto implements DtoInterface
         return $data;
     }
 
-    protected function isPartially(): bool
-    {
-        return false;
-    }
-    
     protected function resolveExpectedProperty(string $method): string
     {
         if (\str_starts_with($method, 'is')) {
@@ -155,7 +150,6 @@ abstract class Dto implements DtoInterface
             return;
         }
 
-        \settype($value, $typeName);
         $this->{$propertyName} = $value;
     }
 

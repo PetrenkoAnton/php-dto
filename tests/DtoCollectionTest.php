@@ -35,6 +35,7 @@ class DtoCollectionTest extends TestCase
     /**
      * @group ok
      * @throws SetValueException
+     * @throws AddDtoException
      */
     public function testAddMethodSuccess(): void
     {
@@ -73,6 +74,7 @@ class DtoCollectionTest extends TestCase
     /**
      * @group ok
      * @throws SetValueException
+     * @throws AddDtoException
      */
     public function testAddMethodThrowsException(): void
     {
