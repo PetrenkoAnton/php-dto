@@ -72,13 +72,15 @@ class DtoCollectionTest extends TestCase
     }
 
     /**
-     * @group ok
+     * @group +
      * @throws SetValueException
      * @throws AddDtoException
      */
     public function testAddMethodThrowsException(): void
     {
         $productDto = new ProductDto([]);
+        var_dump(111);
+        die;
 
         $dtoCollection = new PersonDtoCollection();
         $dtoCollection->add($this->aliceDto);

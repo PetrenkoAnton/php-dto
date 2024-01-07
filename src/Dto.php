@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Dto;
 
 use Dto\Common\ArrayableInterface;
+use Dto\Exception\DeclarationException;
+use Dto\Exception\DeclarationExceptions\MixedDeclarationException;
+use Dto\Exception\DeclarationExceptions\NoTypeDeclarationException;
+use Dto\Exception\DeclarationExceptions\NullableDeclarationException;
+use Dto\Exception\DeclarationExceptions\ObjectDeclarationException;
 use Dto\Exception\GetValueException;
 use Dto\Exception\SetValueException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
-use ReflectionType;
 
 abstract class Dto implements DtoInterface
 {
@@ -20,6 +24,7 @@ abstract class Dto implements DtoInterface
     private array $properties;
 
     /**
+     * @throws DeclarationException
      * @throws SetValueException
      */
     public function __construct(array $data)
@@ -30,6 +35,8 @@ abstract class Dto implements DtoInterface
             $name = $property->getName();
             $type = $property->getType();
             $value = $data[$name] ?? null;
+
+            $this->validateDeclaration($property);
 
             try {
                 $this->setValue($type, $name, $value);
@@ -70,6 +77,24 @@ abstract class Dto implements DtoInterface
         return $data;
     }
 
+    /**
+     * @throws DeclarationException
+     */
+    private function validateDeclaration(ReflectionProperty $property): void
+    {
+        if (\is_null($property->getType()))
+            throw new NoTypeDeclarationException($this::class, $property->getName());
+
+        if ($property->getType()->getName() === 'mixed')
+            throw new MixedDeclarationException($this::class, $property->getName());
+
+        if ($property->getType()->allowsNull())
+            throw new NullableDeclarationException($this::class, $property->getName());
+
+        if ($property->getType()->getName() === 'object')
+            throw new ObjectDeclarationException($this::class, $property->getName());
+    }
+
     protected function resolveExpectedProperty(string $method): string
     {
         if (\str_starts_with($method, 'is')) {
@@ -104,20 +129,7 @@ abstract class Dto implements DtoInterface
     /**
      * @throws ReflectionException
      */
-    private function setValue(?ReflectionType $propertyType, string $propertyName, mixed $value): void
-    {
-        if ($propertyType === null || ($propertyType->allowsNull() && $value === null)) {
-            $this->{$propertyName} = $value;
-            return;
-        }
-
-        $this->setTypedValue($propertyType, $propertyName, $value);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    protected function setTypedValue(\ReflectionType $propertyType, string $propertyName, mixed $value): void
+    protected function setValue(\ReflectionType $propertyType, string $propertyName, mixed $value): void
     {
         /** @var string $typeName */
         $typeName = $propertyType->getName();

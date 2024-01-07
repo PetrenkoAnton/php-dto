@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Fixtures\Unsupported;
+
+use Dto\Dto;
+
+class MixedDeclarationDto extends Dto
+{
+    protected mixed $name;
+}

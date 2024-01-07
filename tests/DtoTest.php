@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Dto\Exception\DeclarationException;
 use Dto\Exception\SetValueException;
 use Dto\Exception\GetValueException;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ class DtoTest extends TestCase
 
     /**
      * @throws SetValueException
+     * @throws DeclarationException
      */
     public function setUp(): void
     {
@@ -59,7 +61,7 @@ class DtoTest extends TestCase
     }
 
     /**
-     * @group +
+     * @group ok
      * @dataProvider dpInvalidData
      */
     public function testSetInvalidValueThrowsException(array $data, string $msg): void
