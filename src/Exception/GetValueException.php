@@ -6,11 +6,13 @@ namespace Dto\Exception;
 
 class GetValueException extends \Exception
 {
-    public function __construct()
+    public function __construct(string $dto, string $property)
     {
         parent::__construct(
             \sprintf(
-                'Get value error'
+                "Dto: %s | Property: %s",
+                $dto,
+                $property,
             )
         );
     }

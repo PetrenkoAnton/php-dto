@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace Dto;
 
+use Dto\Common\ArrayableInterface;
 use Dto\Exception\GetValueException;
 use Dto\Exception\SetValueException;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionProperty;
+use ReflectionType;
 
 abstract class Dto implements DtoInterface
 {
     /**
-     * @var \ReflectionProperty[]
+     * @var ReflectionProperty[]
      */
     private array $properties;
 
@@ -22,27 +27,47 @@ abstract class Dto implements DtoInterface
         $this->properties = (new \ReflectionClass($this))->getProperties(\ReflectionProperty::IS_PROTECTED);
 
         foreach ($this->properties as $property) {
-            $propertyName = $property->getName();
-            $propertyType = $property->getType();
-            $value = $data[$propertyName] ?? null;
+            $name = $property->getName();
+            $type = $property->getType();
+            $value = $data[$name] ?? null;
 
             try {
-                $this->setValue($propertyType, $propertyName, $value);
-            } catch (\Throwable $throwable) {
-                throw new SetValueException($this::class, $propertyName, $value, $throwable); // TODO: improve
+                $this->setValue($type, $name, $value);
+            } catch (\Throwable) {
+                throw new SetValueException($this::class, $name, (string)$value);
             }
         }
     }
 
+    /**
+     * @throws GetValueException
+     */
     public function __call(string $name, array $arguments): mixed
     {
         try {
             $property = $this->resolveExpectedProperty($name);
-        } catch (\InvalidArgumentException $e) {
-            throw new GetValueException($this::class, $name, $e);
+        } catch (\InvalidArgumentException) {
+            // TODO!
+            throw new GetValueException($this::class, '!property!');
         }
 
         return $this->$property;
+    }
+
+    public function toArray(): array
+    {
+        $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED);
+
+        $data = [];
+
+        foreach ($properties as $property) {
+            $property->setAccessible(true);
+            $value = $property->getValue($this);
+
+            $data[$property->getName()] = $value instanceof ArrayableInterface ? $value->toArray() : $value;
+        }
+
+        return $data;
     }
 
     protected function resolveExpectedProperty(string $method): string
@@ -50,13 +75,13 @@ abstract class Dto implements DtoInterface
         if (\str_starts_with($method, 'is')) {
             $expectedProperty = \lcfirst(\substr($method, 2));
 
-            return $this->_getExpectedProperty($expectedProperty, $method);
+            return $this->getExpectedProperty($expectedProperty, $method);
         }
 
         if (\str_starts_with($method, 'get')) {
             $expectedProperty = \lcfirst(\substr($method, 3));
 
-            return $this->_getExpectedProperty($expectedProperty, $method);
+            return $this->getExpectedProperty($expectedProperty, $method);
         }
 
         // TODO! Temporary handler. Delete before production ready
@@ -66,7 +91,7 @@ abstract class Dto implements DtoInterface
         throw new \InvalidArgumentException("Unexpected method name: {$method}");
     }
 
-    private function _getExpectedProperty(string $expectedProperty, string $method): string
+    private function getExpectedProperty(string $expectedProperty, string $method): string
     {
         foreach ($this->properties as $property) {
             if ($property->getName() === $expectedProperty)
@@ -76,23 +101,22 @@ abstract class Dto implements DtoInterface
         throw new \InvalidArgumentException("Unexpected method name: {$method}");
     }
 
-    ////
-
-    protected function setValue(?\ReflectionType $propertyType, string $propertyName, mixed $value): void
+    /**
+     * @throws ReflectionException
+     */
+    private function setValue(?ReflectionType $propertyType, string $propertyName, mixed $value): void
     {
-        if ($propertyType === null) {
-            $this->setWithoutType($propertyName, $value);
-            return;
-        }
-
-        if ($propertyType->allowsNull() && $value === null) {
-            $this->setWithoutType($propertyName, null);
+        if ($propertyType === null || ($propertyType->allowsNull() && $value === null)) {
+            $this->{$propertyName} = $value;
             return;
         }
 
         $this->setTypedValue($propertyType, $propertyName, $value);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setTypedValue(\ReflectionType $propertyType, string $propertyName, mixed $value): void
     {
         /** @var string $typeName */
@@ -116,12 +140,7 @@ abstract class Dto implements DtoInterface
             return;
         }
 
-        $this->setObjectType($typeName, $propertyName, $value);
-    }
-
-    protected function setWithoutType(string $propertyName, mixed $value): void
-    {
-        $this->{$propertyName} = $value;
+        $this->{$propertyName} = $this->createObject($typeName, $value);
     }
 
     private function setBuiltinType(string $typeName, string $propertyName, mixed $value): void
@@ -135,82 +154,24 @@ abstract class Dto implements DtoInterface
         $this->{$propertyName} = $value;
     }
 
-    private function setDtoCollectionType(string $typeName, string $propertyName, array $value): void
+    /**
+     * @throws ReflectionException
+     */
+    private function setDtoCollectionType(string $typeName, string $propertyName, array $values): void
     {
-        /** @var DtoCollection $collection */
         $collection = new $typeName();
-        foreach ($value as $v) {
-            $itemClassProperty = (new \ReflectionClass($collection))->getProperty('entityClass');
-            $itemClassProperty->setAccessible(true);
-            $itemClass = $itemClassProperty->getValue($collection);
-            $item = $v instanceof $itemClass ? $v : $this->createObject($itemClass, $this->prepareCollectionItem($v));
+        $dto = (new ReflectionClass($typeName))->getConstructor()->getParameters()[0]->getType()->getName();
+
+        foreach ($values as $value) {
+            $item = $this->createObject($dto, $value);
             $collection->add($item);
         }
+
         $this->{$propertyName} = $collection;
-    }
-
-    /**
-     * @param array|ArrayableInterface|mixed $value
-     */
-    private function prepareCollectionItem(mixed $value): array
-    {
-        if (\is_array($value)) {
-            return $value;
-        }
-
-        if ($value instanceof ArrayableInterface) {
-            return $value->toArray();
-        }
-
-        return [];
-    }
-
-    private function setObjectType(string $typeName, string $propertyName, array $value): void
-    {
-        $this->{$propertyName} = $this->createObject($typeName, $value);
     }
 
     private function createObject(string $class, array $value): object
     {
-        if (!\is_subclass_of($class, DtoInterface::class)) {
-            throw new \TypeError("Class $class not allowed, only Dto classes allowed");
-        }
         return new $class($value);
-    }
-
-    public function toArray(): array
-    {
-        $data = \get_object_vars($this);
-        foreach ($data as $key => $val) {
-            $accessor = $this->resolveAccessor($key);
-            if (\method_exists($this, $accessor)) {
-                $data[$key] = $this->$accessor();
-            }
-            if ($data[$key] instanceof ArrayableInterface) {
-                $data[$key] = $data[$key]->toArray();
-            }
-        }
-        return $data;
-    }
-
-    protected function resolveAccessor(string $key): string
-    {
-        $key = $this->normalizeKey($key);
-
-        if (str_starts_with($key, 'is') && \method_exists($this, $key)) {
-            return $key;
-        }
-
-        $accessor = 'is' . \ucfirst($key);
-        if (\method_exists($this, $accessor)) {
-            return $accessor;
-        }
-
-        return 'get' . \ucfirst($key);
-    }
-
-    protected function normalizeKey(string $key): string
-    {
-        return \lcfirst(\str_replace('_', '', \ucwords($key, '_')));
     }
 }

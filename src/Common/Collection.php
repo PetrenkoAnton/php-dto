@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dto\Common;
 
-abstract class Collection implements CollectionInterface, \Countable
+abstract class Collection implements CollectionInterface, \Countable, ArrayableInterface
 {
     protected array $items = [];
 

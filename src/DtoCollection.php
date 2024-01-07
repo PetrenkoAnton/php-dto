@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dto;
 
+use Dto\Common\ArrayableInterface;
 use Dto\Common\Collection;
 use Dto\Exception\AddDtoCollectionException;
 use ReflectionClass;
@@ -25,6 +26,16 @@ abstract class DtoCollection extends Collection
         $this->validate($dto);
 
         $this->items[] = $dto;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return \array_map(static function (ArrayableInterface $dto) {
+            return $dto->toArray();
+        }, $this->items);
     }
 
     /**
