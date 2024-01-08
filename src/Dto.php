@@ -12,10 +12,12 @@ use Dto\Exception\DeclarationExceptions\NoTypeDeclarationException;
 use Dto\Exception\DeclarationExceptions\NullableDeclarationException;
 use Dto\Exception\DeclarationExceptions\ObjectDeclarationException;
 use Dto\Exception\EnumBackingValueException;
+use Dto\Exception\EnumNoBackingValueException;
 use Dto\Exception\GetValueException;
 use Dto\Exception\InputDataException;
 use Dto\Exception\SetValueEnumException;
 use Dto\Exception\SetValueException;
+use Error;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
@@ -64,6 +66,9 @@ abstract class Dto implements DtoInterface
                     givenType: gettype($value),
                     value: $value
                 );
+            }
+            catch (EnumNoBackingValueException $e) {
+                throw $e;
             }
             catch (\Throwable) {
                 throw new SetValueException(
@@ -234,6 +239,8 @@ abstract class Dto implements DtoInterface
             $this->{$propertyName} = $typeName::from($value);
         } catch (ValueError) {
             throw new EnumBackingValueException(array_column($typeName::cases(), 'value'));
+        } catch (Error) {
+            throw new EnumNoBackingValueException($this::class, $propertyName);
         }
     }
 
