@@ -2,18 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Dto\Exception;
+namespace Dto\Exception\DtoException\SetupDtoException;
 
-class InputDataException extends \Exception
+use Dto\Exception\DtoException\SetupDtoException;
+
+class InputDataException extends SetupDtoException
 {
     public function __construct(string $dto, string $property)
     {
         parent::__construct(
-            \sprintf(
+            message: \sprintf(
                 "Dto: %s | Property: %s | Err: No data",
                 $dto,
                 $property
-            )
+            ),
+            code: self::EMPTY_INPUT_DATA_CODE,
         );
     }
 }

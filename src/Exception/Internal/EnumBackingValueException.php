@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dto\Exception;
+namespace Dto\Exception\Internal;
 
 class EnumBackingValueException extends \Exception
 {

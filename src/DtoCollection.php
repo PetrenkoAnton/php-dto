@@ -6,7 +6,7 @@ namespace Dto;
 
 use Dto\Common\ArrayableInterface;
 use Dto\Common\Collection;
-use Dto\Exception\AddDtoException;
+use Dto\Exception\DtoException\SetupDtoException\AddDtoException;
 use ReflectionClass;
 
 abstract class DtoCollection extends Collection

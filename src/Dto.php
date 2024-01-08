@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Dto;
 
 use Dto\Common\ArrayableInterface;
+use Dto\Exception\DtoException;
+use Dto\Exception\DtoException\HandleDtoException\GetValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\EnumNoBackingValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\MixedDeclarationException;
@@ -12,11 +14,10 @@ use Dto\Exception\DtoException\InitDtoException\DeclarationException\NotDtoClass
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NoTypeDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NullableDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\ObjectDeclarationException;
-use Dto\Exception\EnumBackingValueException;
-use Dto\Exception\GetValueException;
-use Dto\Exception\InputDataException;
-use Dto\Exception\SetValueEnumException;
-use Dto\Exception\SetValueException;
+use Dto\Exception\DtoException\SetupDtoException\InputDataException;
+use Dto\Exception\DtoException\SetupDtoException\SetValueEnumException;
+use Dto\Exception\DtoException\SetupDtoException\SetValueException;
+use Dto\Exception\Internal\EnumBackingValueException;
 use Error;
 use InvalidArgumentException;
 use ReflectionClass;
@@ -33,9 +34,7 @@ abstract class Dto implements DtoInterface
     private array $properties;
 
     /**
-     * @throws DeclarationException
-     * @throws SetValueException
-     * @throws InputDataException
+     * @throws DtoException
      */
     public function __construct(array $data)
     {

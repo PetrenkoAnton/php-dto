@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Dto\Exception;
+namespace Dto\Exception\DtoException\SetupDtoException;
 
-class SetValueEnumException extends \Exception
+use Dto\Exception\DtoException\SetupDtoException;
+
+class SetValueEnumException extends SetupDtoException
 {
     public function __construct(
         string $dto,
@@ -16,7 +18,7 @@ class SetValueEnumException extends \Exception
     )
     {
         parent::__construct(
-            \sprintf(
+            message: \sprintf(
                 "Dto: %s | Property: %s | Enum: %s | Expected values: %s | Given type: %s | Value: %s",
                 $dto,
                 $property,
@@ -24,7 +26,8 @@ class SetValueEnumException extends \Exception
                 $expectedValues,
                 $givenType,
                 \json_encode($value),
-            )
+            ),
+            code: self::SET_INVALID_ENUM_VALUE_CODE,
         );
     }
 }

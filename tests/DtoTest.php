@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Dto\Exception\DtoException\HandleDtoException\GetValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
-use Dto\Exception\GetValueException;
-use Dto\Exception\InputDataException;
-use Dto\Exception\SetValueException;
+use Dto\Exception\DtoException\SetupDtoException\InputDataException;
+use Dto\Exception\DtoException\SetupDtoException\SetValueException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
 

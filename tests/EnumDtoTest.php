@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\SetValueEnumException;
+use Dto\Exception\DtoException\SetupDtoException\SetValueEnumException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\ColorEnum;
 use Tests\Fixtures\WithEnumDto;

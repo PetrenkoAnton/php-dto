@@ -10,8 +10,8 @@ use Dto\Exception\DtoException\InitDtoException\DeclarationException\NotDtoClass
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NoTypeDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NullableDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\ObjectDeclarationException;
-use Dto\Exception\InputDataException;
-use Dto\Exception\SetValueException;
+use Dto\Exception\DtoException\SetupDtoException\InputDataException;
+use Dto\Exception\DtoException\SetupDtoException\SetValueException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Unsupported\MixedDeclarationDto;
 use Tests\Fixtures\Unsupported\NoDeclarationDto;
