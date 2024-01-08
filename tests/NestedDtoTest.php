@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException;
 use Dto\Exception\InputDataException;
 use Dto\Exception\SetValueException;
 use PHPUnit\Framework\TestCase;

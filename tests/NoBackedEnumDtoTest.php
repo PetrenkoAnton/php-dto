@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\EnumNoBackingValueException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException\EnumNoBackingValueException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\WithNoBackedEnumDto;
 

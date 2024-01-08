@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DeclarationException;
-use Dto\Exception\DeclarationExceptions\MixedDeclarationException;
-use Dto\Exception\DeclarationExceptions\NotDtoClassDeclarationException;
-use Dto\Exception\DeclarationExceptions\NoTypeDeclarationException;
-use Dto\Exception\DeclarationExceptions\NullableDeclarationException;
-use Dto\Exception\DeclarationExceptions\ObjectDeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException\MixedDeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException\NotDtoClassDeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException\NoTypeDeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException\NullableDeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException\ObjectDeclarationException;
 use Dto\Exception\InputDataException;
 use Dto\Exception\SetValueException;
 use PHPUnit\Framework\TestCase;
