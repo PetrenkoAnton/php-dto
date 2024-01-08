@@ -11,14 +11,17 @@ use Dto\Exception\DeclarationExceptions\NotDtoClassDeclarationException;
 use Dto\Exception\DeclarationExceptions\NoTypeDeclarationException;
 use Dto\Exception\DeclarationExceptions\NullableDeclarationException;
 use Dto\Exception\DeclarationExceptions\ObjectDeclarationException;
+use Dto\Exception\EnumBackingValueException;
 use Dto\Exception\GetValueException;
 use Dto\Exception\InputDataException;
+use Dto\Exception\SetValueEnumException;
 use Dto\Exception\SetValueException;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 use UnitEnum;
+use ValueError;
 
 abstract class Dto implements DtoInterface
 {
@@ -49,8 +52,27 @@ abstract class Dto implements DtoInterface
 
             try {
                 $this->setValue($type, $name, $value);
-            } catch (\Throwable) {
-                throw new SetValueException($this::class, $name, $type->getName(), gettype($value), $value);
+            }
+            catch (EnumBackingValueException $e) {
+                $expectedValues = \implode(', ', $e->getData());
+
+                throw new SetValueEnumException(
+                    dto: $this::class,
+                    property: $name,
+                    type: $type->getName(),
+                    expectedValues: $expectedValues,
+                    givenType: gettype($value),
+                    value: $value
+                );
+            }
+            catch (\Throwable) {
+                throw new SetValueException(
+                    dto: $this::class,
+                    property: $name,
+                    expectedType: $type->getName(),
+                    givenType: gettype($value),
+                    value: $value
+                );
             }
         }
     }
@@ -206,7 +228,13 @@ abstract class Dto implements DtoInterface
 
     private function setEnumValue(string $typeName, string $propertyName, mixed $value): void
     {
-        $this->{$propertyName} = $typeName::from($value);
+        /** @var UnitEnum $typeName */
+
+        try {
+            $this->{$propertyName} = $typeName::from($value);
+        } catch (ValueError) {
+            throw new EnumBackingValueException(array_column($typeName::cases(), 'value'));
+        }
     }
 
     private function createObject(string $class, array $value): object

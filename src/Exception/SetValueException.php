@@ -6,7 +6,7 @@ namespace Dto\Exception;
 
 class SetValueException extends \Exception
 {
-    public function __construct(string $dto, string $property, string $expectedType, string $givenType,  mixed $value)
+    public function __construct(string $dto, string $property, string $expectedType, string $givenType, mixed $value)
     {
         parent::__construct(
             \sprintf(
@@ -15,7 +15,6 @@ class SetValueException extends \Exception
                 $property,
                 $expectedType,
                 $givenType,
-                // TODO! => serialize
                 \json_encode($value),
             )
         );
