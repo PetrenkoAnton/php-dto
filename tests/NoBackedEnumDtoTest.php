@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DtoException\InitDtoException\DeclarationException\EnumNoBackingValueException;
+use Dto\Exception\DtoException\InitDtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\WithNoBackedEnumDto;
 
@@ -15,8 +15,9 @@ class NoBackedEnumDtoTest extends TestCase
      */
     public function testGetValueSuccess(): void
     {
-        $this->expectException(EnumNoBackingValueException::class);
+        $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage('Dto: Tests\Fixtures\WithNoBackedEnumDto | Property: color | Err: No backing value for enum');
+        $this->expectExceptionCode(106);
         new WithNoBackedEnumDto(['color' => 'red']);
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DtoException\InitDtoException\DeclarationException;
-use Dto\Exception\DtoException\SetupDtoException\InputDataException;
-use Dto\Exception\DtoException\SetupDtoException\SetValueException;
+use Dto\Exception\DtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\NestedDto;
 
@@ -28,9 +26,7 @@ class NestedDtoTest extends TestCase
     private readonly NestedDto $dto;
 
     /**
-     * @throws InputDataException
-     * @throws DeclarationException
-     * @throws SetValueException
+     * @throws DtoException
      */
     public function setUp(): void
     {

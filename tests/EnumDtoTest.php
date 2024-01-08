@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DtoException\SetupDtoException\SetValueEnumException;
+use Dto\Exception\DtoException;
+use Dto\Exception\DtoException\SetupDtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\ColorEnum;
 use Tests\Fixtures\WithEnumDto;
@@ -13,6 +14,7 @@ class EnumDtoTest extends TestCase
 {
     /**
      * @group ok
+     * @throws DtoException
      */
     public function testGetValueSuccess(): void
     {
@@ -28,8 +30,9 @@ class EnumDtoTest extends TestCase
      */
     public function testSetInvalidValueThrowsException(array $data, string $msg): void
     {
-        $this->expectException(SetValueEnumException::class);
+        $this->expectException(SetupDtoException::class);
         $this->expectExceptionMessage($msg);
+        $this->expectExceptionCode(204);
         new WithEnumDto($data);
     }
 

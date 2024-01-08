@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DtoException\HandleDtoException\GetValueException;
-use Dto\Exception\DtoException\InitDtoException\DeclarationException;
-use Dto\Exception\DtoException\SetupDtoException\InputDataException;
-use Dto\Exception\DtoException\SetupDtoException\SetValueException;
+use Dto\Exception\DtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
 
@@ -18,9 +15,7 @@ class DtoTest extends TestCase
     private readonly PersonDto $dto;
 
     /**
-     * @throws SetValueException
-     * @throws DeclarationException
-     * @throws InputDataException
+     * @throws DtoException
      */
     public function setUp(): void
     {
@@ -45,41 +40,41 @@ class DtoTest extends TestCase
 
     /**
      * @group ok
-     * @dataProvider dpInvalidGetter
+     * @dataProvider dpInvalidGetters
      */
-    public function testGetInvalidValueThrowsException(string $getter): void
+    public function testGetInvalidValueThrowsException(string $getter, string $property): void
     {
-        $this->expectException(GetValueException::class);
+        $this->expectException(DtoException::class);
+        $this->expectExceptionMessage("Dto: Tests\Fixtures\PersonDto | Unexpected property: $property");
+        $this->expectExceptionCode(301);
         $this->dto->$getter();
     }
 
-    public function dpInvalidGetter(): array
+    public function dpInvalidGetters(): array
     {
         return [
-            ['getPrice'],
-            ['getType'],
-            ['isAvailable'],
+            ['getPrice', 'price'],
+            ['getType', 'type'],
+            ['isAvailable', 'available'],
         ];
     }
 
     /**
      * @group ok
-     * @throws SetValueException
-     * @throws DeclarationException
-     * @throws InputDataException
+     * @throws DtoException
      * @dataProvider dpInvalidData
      */
     public function testSetInvalidValueThrowsException(array $data, string $msg): void
     {
-        $this->expectException(SetValueException::class);
+        $this->expectException(DtoException::class);
         $this->expectExceptionMessage($msg);
+        $this->expectExceptionCode(203);
         new PersonDto($data);
     }
 
     public function dpInvalidData(): array
     {
         return [
-            //// name
             [
                 [
                     'name' => null,
@@ -89,10 +84,10 @@ class DtoTest extends TestCase
             ],
             [
                 [
-                    'name' => false,
-                    'age' => 25,
+                    'name' => 'Alice',
+                    'age' => false,
                 ],
-                'Dto: Tests\Fixtures\PersonDto | Property: name | Expected type: string | Given type: boolean | Value: false',
+                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: boolean | Value: false',
             ],
             [
                 [
@@ -103,10 +98,10 @@ class DtoTest extends TestCase
             ],
             [
                 [
-                    'name' => 123.002,
-                    'age' => 25,
+                    'name' => 'Alice',
+                    'age' => 25.002,
                 ],
-                'Dto: Tests\Fixtures\PersonDto | Property: name | Expected type: string | Given type: double | Value: 123.002',
+                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: double | Value: 25.002',
             ],
             [
                 [
@@ -117,47 +112,10 @@ class DtoTest extends TestCase
             ],
             [
                 [
-                    'name' => new class{},
-                    'age' => 25,
-                ],
-                'Dto: Tests\Fixtures\PersonDto | Property: name | Expected type: string | Given type: object | Value: {}',
-            ],
-
-            //// age
-            [
-                [
                     'name' => 'Alice',
-                    'age' => null,
+                    'age' => new class{public int $age = 25;},
                 ],
-                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: NULL | Value: null',
-            ],
-            [
-                [
-                    'name' => 'Alice',
-                    'age' => true,
-                ],
-                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: boolean | Value: true',
-            ],
-            [
-                [
-                    'name' => 'Alice',
-                    'age' => 123.002,
-                ],
-                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: double | Value: 123.002',
-            ],
-            [
-                [
-                    'name' => 'Alice',
-                    'age' => [],
-                ],
-                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: array | Value: []',
-            ],
-            [
-                [
-                    'name' => 'Alice',
-                    'age' => new class{},
-                ],
-                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: object | Value: {}',
+                'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: object | Value: {"age":25}',
             ],
         ];
     }

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DtoException\InitDtoException\DeclarationException;
-use Dto\Exception\DtoException\SetupDtoException\AddDtoException;
-use Dto\Exception\DtoException\SetupDtoException\InputDataException;
-use Dto\Exception\DtoException\SetupDtoException\SetValueException;
+use Dto\Exception\DtoException;
+use Dto\Exception\DtoException\SetupDtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\PersonDtoCollection;
@@ -20,9 +18,7 @@ class DtoCollectionTest extends TestCase
     private readonly PersonDto $aliceDto;
 
     /**
-     * @throws DeclarationException
-     * @throws InputDataException
-     * @throws SetValueException
+     * @throws DtoException
      */
     public function setUp(): void
     {
@@ -38,10 +34,7 @@ class DtoCollectionTest extends TestCase
 
     /**
      * @group ok
-     * @throws DeclarationException
-     * @throws InputDataException
-     * @throws AddDtoException
-     * @throws SetValueException
+     * @throws DtoException
      */
     public function testAddMethodSuccess(): void
     {
@@ -79,12 +72,9 @@ class DtoCollectionTest extends TestCase
 
     /**
      * @group ok
-     * @throws DeclarationException
-     * @throws InputDataException
-     * @throws AddDtoException
-     * @throws SetValueException
+     * @throws DtoException
      */
-    public function testAddMethodThrowsException(): void
+    public function testAddMethodThrowsSetupDtoException(): void
     {
         $data = [
             'price' => 999,
@@ -100,15 +90,9 @@ class DtoCollectionTest extends TestCase
 
         $this->assertCount(1, $dtoCollection);
 
-        $msg = \sprintf(
-            'DtoCollection: %s | Expected Dto: %s | Given Dto: %s',
-            PersonDtoCollection::class,
-            PersonDto::class,
-            ProductDto::class,
-        );
-
-        $this->expectException(AddDtoException::class);
-        $this->expectExceptionMessage($msg);
+        $this->expectException(SetupDtoException::class);
+        $this->expectExceptionMessage('DtoCollection: Tests\Fixtures\PersonDtoCollection | Expected Dto: Tests\Fixtures\PersonDto | Given Dto: Tests\Fixtures\ProductDto');
+        $this->expectExceptionCode(201);
         $dtoCollection->add($productDto);
     }
 }
