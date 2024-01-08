@@ -7,15 +7,18 @@ namespace Dto;
 use Dto\Common\ArrayableInterface;
 use Dto\Exception\DeclarationException;
 use Dto\Exception\DeclarationExceptions\MixedDeclarationException;
+use Dto\Exception\DeclarationExceptions\NotDtoClassDeclarationException;
 use Dto\Exception\DeclarationExceptions\NoTypeDeclarationException;
 use Dto\Exception\DeclarationExceptions\NullableDeclarationException;
 use Dto\Exception\DeclarationExceptions\ObjectDeclarationException;
 use Dto\Exception\GetValueException;
 use Dto\Exception\InputDataException;
 use Dto\Exception\SetValueException;
+use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
+use UnitEnum;
 
 abstract class Dto implements DtoInterface
 {
@@ -59,9 +62,8 @@ abstract class Dto implements DtoInterface
     {
         try {
             $property = $this->resolveExpectedProperty($name);
-        } catch (\InvalidArgumentException) {
-            // TODO!
-            throw new GetValueException($this::class, '!property!');
+        } catch (\InvalidArgumentException $e) {
+            throw new GetValueException($this::class, $e->getMessage());
         }
 
         return $this->$property;
@@ -88,17 +90,29 @@ abstract class Dto implements DtoInterface
      */
     private function validateDeclaration(ReflectionProperty $property): void
     {
-        if (\is_null($property->getType()))
-            throw new NoTypeDeclarationException($this::class, $property->getName());
+        $type = $property->getType();
+        $name = $property->getName();
 
-        if ($property->getType()->getName() === 'mixed')
-            throw new MixedDeclarationException($this::class, $property->getName());
+        if (\is_null($type))
+            throw new NoTypeDeclarationException($this::class, $name);
 
-        if ($property->getType()->allowsNull())
-            throw new NullableDeclarationException($this::class, $property->getName());
+        if ($type->getName() === 'mixed')
+            throw new MixedDeclarationException($this::class, $name);
 
-        if ($property->getType()->getName() === 'object')
-            throw new ObjectDeclarationException($this::class, $property->getName());
+        if ($type->allowsNull())
+            throw new NullableDeclarationException($this::class, $name);
+
+        if ($type->getName() === 'object')
+            throw new ObjectDeclarationException($this::class, $name);
+
+        if (!$type->isBuiltin() && \is_subclass_of($type->getName(), UnitEnum::class))
+            return;
+
+        if (!$type->isBuiltin() && \is_subclass_of($type->getName(), DtoCollection::class))
+            return;
+
+        if (!$type->isBuiltin() && !\is_subclass_of($type->getName(), DtoInterface::class))
+            throw new NotDtoClassDeclarationException($this::class, $name);
     }
 
     private function resolveExpectedProperty(string $method): string
@@ -106,30 +120,26 @@ abstract class Dto implements DtoInterface
         if (\str_starts_with($method, 'is')) {
             $expectedProperty = \lcfirst(\substr($method, 2));
 
-            return $this->getExpectedProperty($expectedProperty, $method);
+            return $this->getExpectedProperty($expectedProperty);
         }
 
         if (\str_starts_with($method, 'get')) {
             $expectedProperty = \lcfirst(\substr($method, 3));
 
-            return $this->getExpectedProperty($expectedProperty, $method);
+            return $this->getExpectedProperty($expectedProperty);
         }
 
-        // TODO! Temporary handler. Delete before production ready
-        var_dump(666);
-        die;
-
-        throw new \InvalidArgumentException("Unexpected method name: {$method}");
+        throw new InvalidArgumentException("Unexpected method: $method");
     }
 
-    private function getExpectedProperty(string $expectedProperty, string $method): string
+    private function getExpectedProperty(string $expectedProperty): string
     {
         foreach ($this->properties as $property) {
             if ($property->getName() === $expectedProperty)
                 return $expectedProperty;
         }
 
-        throw new \InvalidArgumentException("Unexpected method name: {$method}");
+        throw new InvalidArgumentException("Unexpected property: $expectedProperty");
     }
 
     /**
@@ -146,6 +156,11 @@ abstract class Dto implements DtoInterface
 
         if ($propertyType->isBuiltin()) {
             $this->setBuiltinType($typeName, $propertyName, $value);
+            return;
+        }
+
+        if (\is_subclass_of($typeName, UnitEnum::class)) {
+            $this->setEnumValue($typeName, $propertyName, $value);
             return;
         }
 
@@ -187,6 +202,11 @@ abstract class Dto implements DtoInterface
         }
 
         $this->{$propertyName} = $collection;
+    }
+
+    private function setEnumValue(string $typeName, string $propertyName, mixed $value): void
+    {
+        $this->{$propertyName} = $typeName::from($value);
     }
 
     private function createObject(string $class, array $value): object

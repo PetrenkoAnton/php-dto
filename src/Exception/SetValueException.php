@@ -15,7 +15,8 @@ class SetValueException extends \Exception
                 $property,
                 $expectedType,
                 $givenType,
-                json_encode($value),
+                // TODO! => serialize
+                \json_encode($value),
             )
         );
     }

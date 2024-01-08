@@ -6,6 +6,7 @@ namespace Test;
 
 use Dto\Exception\DeclarationException;
 use Dto\Exception\DeclarationExceptions\MixedDeclarationException;
+use Dto\Exception\DeclarationExceptions\NotDtoClassDeclarationException;
 use Dto\Exception\DeclarationExceptions\NoTypeDeclarationException;
 use Dto\Exception\DeclarationExceptions\NullableDeclarationException;
 use Dto\Exception\DeclarationExceptions\ObjectDeclarationException;
@@ -16,6 +17,8 @@ use Tests\Fixtures\Unsupported\MixedDeclarationDto;
 use Tests\Fixtures\Unsupported\NoDeclarationDto;
 use Tests\Fixtures\Unsupported\NullableDeclarationDto;
 use Tests\Fixtures\Unsupported\ObjectDeclarationDto;
+use Tests\Fixtures\Unsupported\RandomClass;
+use Tests\Fixtures\Unsupported\RandomClassDeclarationDto;
 
 class UnsupportedDtoTest extends TestCase
 {
@@ -84,5 +87,20 @@ class UnsupportedDtoTest extends TestCase
             'Dto: Tests\Fixtures\Unsupported\ObjectDeclarationDto | Property: name | Err: Unsupported object property type declaration'
         );
         new ObjectDeclarationDto($this->data);
+    }
+
+    /**
+     * @group ok
+     * @throws DeclarationException
+     * @throws InputDataException
+     * @throws SetValueException
+     */
+    public function testRandomClassPropertyTypeDeclarationThrowsException(): void
+    {
+        $this->expectException(NotDtoClassDeclarationException::class);
+        $this->expectExceptionMessage(
+            'Dto: Tests\Fixtures\Unsupported\RandomClassDeclarationDto | Property: name | Err: Class must implement DtoInterface'
+        );
+        new RandomClassDeclarationDto(['name' => new RandomClass()]);
     }
 }
