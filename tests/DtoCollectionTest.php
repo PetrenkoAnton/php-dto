@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Test;
 
 use Dto\Exception\AddDtoException;
+use Dto\Exception\DeclarationException;
+use Dto\Exception\InputDataException;
 use Dto\Exception\SetValueException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
@@ -18,6 +20,8 @@ class DtoCollectionTest extends TestCase
     private readonly PersonDto $aliceDto;
 
     /**
+     * @throws DeclarationException
+     * @throws InputDataException
      * @throws SetValueException
      */
     public function setUp(): void
@@ -34,8 +38,10 @@ class DtoCollectionTest extends TestCase
 
     /**
      * @group ok
-     * @throws SetValueException
+     * @throws DeclarationException
+     * @throws InputDataException
      * @throws AddDtoException
+     * @throws SetValueException
      */
     public function testAddMethodSuccess(): void
     {
@@ -73,6 +79,10 @@ class DtoCollectionTest extends TestCase
 
     /**
      * @group ok
+     * @throws DeclarationException
+     * @throws InputDataException
+     * @throws AddDtoException
+     * @throws SetValueException
      */
     public function testAddMethodThrowsException(): void
     {
