@@ -29,9 +29,6 @@ abstract class DtoCollection extends Collection
         $this->items[] = $dto;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return \array_map(static function (ArrayableInterface $dto) {
@@ -40,7 +37,7 @@ abstract class DtoCollection extends Collection
     }
 
     /**
-     * @throws DtoException
+     * @throws AddDtoException
      */
     private function validate(DtoInterface $dto): void
     {
