@@ -88,7 +88,7 @@ abstract class Dto implements DtoInterface
     {
         try {
             $property = $this->resolveExpectedProperty($name);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new GetValueException($this::class, $e->getMessage());
         }
 
@@ -141,6 +141,9 @@ abstract class Dto implements DtoInterface
             throw new NotDtoClassDeclarationException($this::class, $name);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function resolveExpectedProperty(string $method): string
     {
         if (\str_starts_with($method, 'is')) {
@@ -158,6 +161,9 @@ abstract class Dto implements DtoInterface
         throw new InvalidArgumentException("Unexpected method: $method");
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function getExpectedProperty(string $expectedProperty): string
     {
         foreach ($this->properties as $property) {
@@ -170,15 +176,16 @@ abstract class Dto implements DtoInterface
 
     /**
      * @throws ReflectionException
+     * @throws DtoException
+     * @throws EnumBackingValueException
      */
     private function setValue(\ReflectionType $propertyType, string $propertyName, mixed $value): void
     {
         /** @var string $typeName */
         $typeName = $propertyType->getName();
 
-        if ($value instanceof ArrayableInterface) {
+        if ($value instanceof ArrayableInterface)
             $value = $value->toArray();
-        }
 
         if ($propertyType->isBuiltin()) {
             $this->setBuiltinType($typeName, $propertyName, $value);
@@ -190,10 +197,6 @@ abstract class Dto implements DtoInterface
             return;
         }
 
-        if (!\is_array($value)) {
-            $value = [];
-        }
-
         if (\is_subclass_of($typeName, DtoCollection::class)) {
             $this->setDtoCollectionType($typeName, $propertyName, $value);
             return;
@@ -202,11 +205,13 @@ abstract class Dto implements DtoInterface
         $this->{$propertyName} = $this->createObject($typeName, $value);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function setBuiltinType(string $typeName, string $propertyName, mixed $value): void
     {
-        if ($typeName === 'array' && !\is_array($value)) {
+        if ($typeName === 'array' && !\is_array($value))
             throw new InvalidArgumentException();
-        }
 
         $this->{$propertyName} = $value;
     }
