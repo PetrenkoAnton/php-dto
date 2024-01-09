@@ -7,6 +7,7 @@ namespace Test;
 use Dto\Exception\DtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
+use Tests\Fixtures\ProductDto;
 
 class DtoTest extends TestCase
 {
@@ -64,10 +65,10 @@ class DtoTest extends TestCase
      * @throws DtoException
      * @dataProvider dpInvalidData
      */
-    public function testSetInvalidValueThrowsException(array $data, string $msg): void
+    public function testSetInvalidValueThrowsDtoException(array $data, string $message): void
     {
         $this->expectException(DtoException::class);
-        $this->expectExceptionMessage($msg);
+        $this->expectExceptionMessage($message);
         $this->expectExceptionCode(203);
         new PersonDto($data);
     }
@@ -116,6 +117,41 @@ class DtoTest extends TestCase
                     'age' => new class{public int $age = 25;},
                 ],
                 'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: object | Value: {"age":25}',
+            ],
+        ];
+    }
+
+    /**
+     * @group ok
+     * @throws DtoException
+     * @dataProvider dpInvalidArrayData
+     */
+    public function testSetInvalidArrayValueThrowsDtoException(int|bool $info, string $message): void
+    {
+        $data = [
+            'price' => 999,
+            'type' => 'ticket',
+            'available' => true,
+        ];
+
+        $data += ['info' => $info];
+
+        $this->expectException(DtoException::class);
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode(203);
+        new ProductDto($data);
+    }
+
+    public function dpInvalidArrayData(): array
+    {
+        return [
+            [
+                123,
+                'Dto: Tests\Fixtures\ProductDto | Property: info | Expected type: array | Given type: integer | Value: 123',
+            ],
+            [
+                true,
+                'Dto: Tests\Fixtures\ProductDto | Property: info | Expected type: array | Given type: boolean | Value: true',
             ],
         ];
     }

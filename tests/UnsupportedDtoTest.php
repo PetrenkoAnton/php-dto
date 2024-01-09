@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\InitDtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Unsupported\MixedDeclarationDto;
@@ -24,6 +25,7 @@ class UnsupportedDtoTest extends TestCase
 
     /**
      * @group ok
+     * @throws DtoException
      */
     public function testMissingPropertyTypeDeclarationThrowsException(): void
     {
@@ -37,6 +39,7 @@ class UnsupportedDtoTest extends TestCase
 
     /**
      * @group ok
+     * @throws DtoException
      */
     public function testMixedPropertyTypeDeclarationThrowsException(): void
     {
@@ -50,6 +53,7 @@ class UnsupportedDtoTest extends TestCase
 
     /**
      * @group ok
+     * @throws DtoException
      */
     public function testNullablePropertyTypeDeclarationThrowsException(): void
     {
@@ -63,6 +67,7 @@ class UnsupportedDtoTest extends TestCase
 
     /**
      * @group ok
+     * @throws DtoException
      */
     public function testObjectPropertyTypeDeclarationThrowsException(): void
     {
@@ -76,6 +81,7 @@ class UnsupportedDtoTest extends TestCase
 
     /**
      * @group ok
+     * @throws DtoException
      */
     public function testRandomClassPropertyTypeDeclarationThrowsException(): void
     {

@@ -6,6 +6,7 @@ namespace Dto;
 
 use Dto\Common\ArrayableInterface;
 use Dto\Common\Collection;
+use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\SetupDtoException\AddDtoException;
 use ReflectionClass;
 
@@ -19,7 +20,7 @@ abstract class DtoCollection extends Collection
     }
 
     /**
-     * @throws AddDtoException
+     * @throws DtoException
      */
     public function add(DtoInterface $dto): void
     {
@@ -39,7 +40,7 @@ abstract class DtoCollection extends Collection
     }
 
     /**
-     * @throws AddDtoException
+     * @throws DtoException
      */
     private function validate(DtoInterface $dto): void
     {

@@ -205,12 +205,9 @@ abstract class Dto implements DtoInterface
     private function setBuiltinType(string $typeName, string $propertyName, mixed $value): void
     {
         if ($typeName === 'array' && !\is_array($value)) {
-            $this->{$propertyName} = [];
-            return;
+            throw new InvalidArgumentException();
         }
 
-        // TODO!
-        // \settype($value, $typeName);
         $this->{$propertyName} = $value;
     }
 
@@ -230,10 +227,13 @@ abstract class Dto implements DtoInterface
         $this->{$propertyName} = $collection;
     }
 
+    /**
+     * @throws EnumBackingValueException
+     * @throws EnumNoBackingValueException
+     */
     private function setEnumValue(string $typeName, string $propertyName, mixed $value): void
     {
         /** @var UnitEnum $typeName */
-
         try {
             $this->{$propertyName} = $typeName::from($value);
         } catch (ValueError) {
