@@ -6,7 +6,7 @@ namespace Dto\Exception\DtoException\HandleDtoException;
 
 use Dto\Exception\DtoException\HandleDtoException;
 
-class GetValueException extends HandleDtoException
+final class GetValueException extends HandleDtoException
 {
     public function __construct(string $dto, string $msg)
     {

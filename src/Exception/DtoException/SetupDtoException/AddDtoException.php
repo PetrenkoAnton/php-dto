@@ -6,7 +6,7 @@ namespace Dto\Exception\DtoException\SetupDtoException;
 
 use Dto\Exception\DtoException\SetupDtoException;
 
-class AddDtoException extends SetupDtoException
+final class AddDtoException extends SetupDtoException
 {
     public function __construct(string $dtoCollection, string $expectedDto, string $givenDto)
     {

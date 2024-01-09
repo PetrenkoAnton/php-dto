@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dto\Common;
+namespace Dto;
 
 interface CollectionInterface
 {

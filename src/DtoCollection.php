@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Dto;
 
-use Dto\Common\ArrayableInterface;
-use Dto\Common\Collection;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\SetupDtoException\AddDtoException;
 use ReflectionClass;
@@ -14,7 +12,7 @@ abstract class DtoCollection extends Collection
 {
     protected array $items = [];
 
-    public function __construct(DtoInterface ...$items)
+    public function __construct(Dto ...$items)
     {
         $this->items = $items;
     }
@@ -22,7 +20,7 @@ abstract class DtoCollection extends Collection
     /**
      * @throws DtoException
      */
-    public function add(DtoInterface $dto): void
+    public function add(Dto $dto): void
     {
         $this->validate($dto);
 
@@ -31,7 +29,7 @@ abstract class DtoCollection extends Collection
 
     public function toArray(): array
     {
-        return \array_map(static function (ArrayableInterface $dto) {
+        return \array_map(static function (Arrayable $dto) {
             return $dto->toArray();
         }, $this->items);
     }
@@ -39,7 +37,7 @@ abstract class DtoCollection extends Collection
     /**
      * @throws AddDtoException
      */
-    private function validate(DtoInterface $dto): void
+    private function validate(Dto $dto): void
     {
         $expectedDto = (new ReflectionClass($this))->getConstructor()->getParameters()[0]->getType()->getName();
 

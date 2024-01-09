@@ -6,7 +6,7 @@ namespace Dto\Exception\DtoException\InitDtoException\DeclarationException;
 
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
 
-class EnumNoBackingValueException extends DeclarationException
+final class EnumNoBackingValueException extends DeclarationException
 {
     public function __construct(string $dto, string $property)
     {

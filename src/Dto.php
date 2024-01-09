@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dto;
 
-use Dto\Common\ArrayableInterface;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\HandleDtoException\GetValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
@@ -26,7 +25,7 @@ use ReflectionProperty;
 use UnitEnum;
 use ValueError;
 
-abstract class Dto implements DtoInterface
+abstract class Dto implements Arrayable
 {
     /**
      * @var ReflectionProperty[]
@@ -105,7 +104,7 @@ abstract class Dto implements DtoInterface
             $property->setAccessible(true);
             $value = $property->getValue($this);
 
-            $data[$property->getName()] = $value instanceof ArrayableInterface ? $value->toArray() : $value;
+            $data[$property->getName()] = $value instanceof Arrayable ? $value->toArray() : $value;
         }
 
         return $data;
@@ -137,7 +136,7 @@ abstract class Dto implements DtoInterface
         if (!$type->isBuiltin() && \is_subclass_of($type->getName(), DtoCollection::class))
             return;
 
-        if (!$type->isBuiltin() && !\is_subclass_of($type->getName(), DtoInterface::class))
+        if (!$type->isBuiltin() && !\is_subclass_of($type->getName(), Dto::class))
             throw new NotDtoClassDeclarationException($this::class, $name);
     }
 
@@ -184,7 +183,7 @@ abstract class Dto implements DtoInterface
         /** @var string $typeName */
         $typeName = $propertyType->getName();
 
-        if ($value instanceof ArrayableInterface)
+        if ($value instanceof Arrayable)
             $value = $value->toArray();
 
         if ($propertyType->isBuiltin()) {

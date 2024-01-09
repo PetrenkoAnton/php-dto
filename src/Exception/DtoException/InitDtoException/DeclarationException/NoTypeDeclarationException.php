@@ -6,7 +6,7 @@ namespace Dto\Exception\DtoException\InitDtoException\DeclarationException;
 
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
 
-class NoTypeDeclarationException extends DeclarationException
+final class NoTypeDeclarationException extends DeclarationException
 {
     public function __construct(string $dto, string $property)
     {

@@ -6,7 +6,7 @@ namespace Dto\Exception\DtoException\SetupDtoException;
 
 use Dto\Exception\DtoException\SetupDtoException;
 
-class SetValueException extends SetupDtoException
+final class SetValueException extends SetupDtoException
 {
     public function __construct(string $dto, string $property, string $expectedType, string $givenType, mixed $value)
     {

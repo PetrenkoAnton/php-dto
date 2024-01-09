@@ -6,7 +6,7 @@ namespace Dto\Exception\DtoException\InitDtoException\DeclarationException;
 
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
 
-class MixedDeclarationException extends DeclarationException
+final class MixedDeclarationException extends DeclarationException
 {
     public function __construct(string $dto, string $property)
     {

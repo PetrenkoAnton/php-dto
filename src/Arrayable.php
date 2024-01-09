@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dto\Common;
+namespace Dto;
 
-interface ArrayableInterface
+interface Arrayable
 {
     public function toArray(): array;
 }

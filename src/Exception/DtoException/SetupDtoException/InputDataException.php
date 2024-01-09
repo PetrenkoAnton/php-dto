@@ -6,7 +6,7 @@ namespace Dto\Exception\DtoException\SetupDtoException;
 
 use Dto\Exception\DtoException\SetupDtoException;
 
-class InputDataException extends SetupDtoException
+final class InputDataException extends SetupDtoException
 {
     public function __construct(string $dto, string $property)
     {

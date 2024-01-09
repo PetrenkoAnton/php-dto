@@ -6,5 +6,5 @@ namespace Dto;
 
 interface DtoFactoryInterface
 {
-    public function create(array $data): DtoInterface;
+    public function create(array $data): Dto;
 }
