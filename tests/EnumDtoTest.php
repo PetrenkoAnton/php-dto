@@ -43,19 +43,19 @@ class EnumDtoTest extends TestCase
                 [
                     'color' => 'green',
                 ],
-                'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\ColorEnum | Expected values: red, black, white | Given type: string | Value: "green"',
+                'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\Enum\ColorEnum | Expected values: red, black, white | Given type: string | Value: "green"',
             ],
             [
                 [
                     'color' => 'blue',
                 ],
-                'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\ColorEnum | Expected values: red, black, white | Given type: string | Value: "blue"',
+                'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\Enum\ColorEnum | Expected values: red, black, white | Given type: string | Value: "blue"',
             ],
             [
                 [
                     'color' => '',
                 ],
-                'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\ColorEnum | Expected values: red, black, white | Given type: string | Value: ""',
+                'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\Enum\ColorEnum | Expected values: red, black, white | Given type: string | Value: ""',
             ],
         ];
     }
