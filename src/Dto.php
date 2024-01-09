@@ -37,12 +37,12 @@ abstract class Dto implements Arrayable
      */
     public function __construct(array $data)
     {
-        $this->properties = (new \ReflectionClass($this))->getProperties(\ReflectionProperty::IS_PROTECTED);
+        $this->properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED);
 
         foreach ($this->properties as $property) {
             $name = $property->getName();
 
-            if (!key_exists($name, $data))
+            if (!\key_exists($name, $data))
                 throw new InputDataException($this::class, $name);
 
             $type = $property->getType();
@@ -91,7 +91,7 @@ abstract class Dto implements Arrayable
             throw new GetValueException($this::class, $e->getMessage());
         }
 
-        return $this->$property;
+        return $this->{$property};
     }
 
     public function toArray(): array
@@ -104,7 +104,9 @@ abstract class Dto implements Arrayable
             $property->setAccessible(true);
             $value = $property->getValue($this);
 
-            $data[$property->getName()] = $value instanceof Arrayable ? $value->toArray() : $value;
+            $data[$property->getName()] = \is_subclass_of($value, Arrayable::class)
+                ? $value->toArray()
+                : $value;
         }
 
         return $data;
@@ -118,7 +120,7 @@ abstract class Dto implements Arrayable
         $type = $property->getType();
         $name = $property->getName();
 
-        if (\is_null($type))
+        if (!$type)
             throw new NoTypeDeclarationException($this::class, $name);
 
         if ($type->getName() === 'mixed')
@@ -183,7 +185,7 @@ abstract class Dto implements Arrayable
         /** @var string $typeName */
         $typeName = $propertyType->getName();
 
-        if ($value instanceof Arrayable)
+        if (\is_subclass_of($value, Arrayable::class))
             $value = $value->toArray();
 
         if ($propertyType->isBuiltin()) {
