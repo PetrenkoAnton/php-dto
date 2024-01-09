@@ -7,7 +7,7 @@ namespace Test;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\SetupDtoException;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\ColorEnum;
+use Tests\Fixtures\Enum\ColorEnum;
 use Tests\Fixtures\WithEnumDto;
 
 class EnumDtoTest extends TestCase
