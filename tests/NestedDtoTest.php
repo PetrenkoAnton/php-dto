@@ -83,6 +83,7 @@ class NestedDtoTest extends TestCase
         $this->assertEquals($this->available, $this->dto->getProduct()->isAvailable());
 
         $this->assertIsArray($this->dto->toArray());
+
         $this->assertEquals($this->data, $this->dto->toArray());
     }
 }

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Dto\CollectionException;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\SetupDtoException;
+use Dto\InvalidKeyCollectionException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\PersonDtoCollection;
@@ -17,8 +19,17 @@ class DtoCollectionTest extends TestCase
     private readonly string $aliceName;
     private readonly PersonDto $aliceDto;
 
+    private readonly int $bobAge;
+    private readonly string $bobName;
+
+    private readonly int $samAge;
+    private readonly string $samName;
+
+    private readonly PersonDtoCollection $dtoCollection;
+
     /**
      * @throws DtoException
+     * @throws CollectionException
      */
     public function setUp(): void
     {
@@ -30,49 +41,80 @@ class DtoCollectionTest extends TestCase
         ];
         
         $this->aliceDto = new PersonDto($aliceData);
-    }
 
-    /**
-     * @group ok
-     * @throws DtoException
-     */
-    public function testAddMethodSuccess(): void
-    {
+        [$this->bobName, $this->bobAge] = ['Bob', 30];
+
         $bobData = [
-            'name' => $bobName = 'Bob',
-            'age' => $bobAge = 30,
+            'name' => $this->bobName,
+            'age' => $this->bobAge,
         ];
 
+        [$this->samName, $this->samAge] = ['Sam', 35];
+
         $samData = [
-            'name' => $samName = 'Sam',
-            'age' => $samAge = 35,
+            'name' => $this->samName,
+            'age' => $this->samAge,
         ];
 
         $bobDto = new PersonDto($bobData);
         $samDto = new PersonDto($samData);
 
-        $dtoCollection = new PersonDtoCollection($this->aliceDto);
-        $dtoCollection->add($bobDto);
-        $dtoCollection->add($samDto);
-
-        $this->assertCount(3, $dtoCollection);
-
-        $this->assertEquals($this->aliceName, $dtoCollection->first()->getName());
-        $this->assertEquals($this->aliceAge, $dtoCollection->first()->getAge());
-
-        $this->assertEquals($this->aliceName, $dtoCollection->getItem(0)->getName());
-        $this->assertEquals($this->aliceAge, $dtoCollection->getItem(0)->getAge());
-
-        $this->assertEquals($bobName, $dtoCollection->getItem(1)->getName());
-        $this->assertEquals($bobAge, $dtoCollection->getItem(1)->getAge());
-
-        $this->assertEquals($samName, $dtoCollection->getItem(2)->getName());
-        $this->assertEquals($samAge, $dtoCollection->getItem(2)->getAge());
+        $this->dtoCollection = new PersonDtoCollection($this->aliceDto);
+        $this->dtoCollection->add($bobDto);
+        $this->dtoCollection->add($samDto);
     }
 
     /**
      * @group ok
      * @throws DtoException
+     * @throws CollectionException
+     */
+    public function testAddMethodSuccess(): void
+    {
+        $this->assertCount(3, $this->dtoCollection);
+
+        $this->assertEquals($this->aliceName, $this->dtoCollection->first()->getName());
+        $this->assertEquals($this->aliceAge, $this->dtoCollection->first()->getAge());
+
+        $this->assertEquals($this->aliceName, $this->dtoCollection->getItem(0)->getName());
+        $this->assertEquals($this->aliceAge, $this->dtoCollection->getItem(0)->getAge());
+
+        $this->assertEquals($this->bobName, $this->dtoCollection->getItem(1)->getName());
+        $this->assertEquals($this->bobAge, $this->dtoCollection->getItem(1)->getAge());
+
+        $this->assertEquals($this->samName, $this->dtoCollection->getItem(2)->getName());
+        $this->assertEquals($this->samAge, $this->dtoCollection->getItem(2)->getAge());
+    }
+
+    /**
+     * @group ok
+     * @throws CollectionException
+     * @dataProvider dpInvalidKeys
+     */
+    public function testGetMethodThrowsInvalidKeyCollectionException(int $key): void
+    {
+        $this->expectException(InvalidKeyCollectionException::class);
+        $this->expectExceptionMessage("Collection: Tests\Fixtures\PersonDtoCollection | Invalid key: $key");
+        $this->expectExceptionCode(200);
+        $this->dtoCollection->getItem($key);
+    }
+
+    public function dpInvalidKeys(): array
+    {
+        return [
+            [-100],
+            [-1],
+            [3],
+            [4],
+            [5],
+            [100],
+        ];
+    }
+
+    /**
+     * @group ok
+     * @throws DtoException
+     * @throws CollectionException
      */
     public function testAddMethodThrowsSetupDtoException(): void
     {

@@ -25,7 +25,7 @@ use ReflectionProperty;
 use UnitEnum;
 use ValueError;
 
-abstract class Dto implements Arrayable
+abstract class Dto implements Collectable
 {
     /**
      * @var ReflectionProperty[]
@@ -185,7 +185,7 @@ abstract class Dto implements Arrayable
         /** @var string $typeName */
         $typeName = $propertyType->getName();
 
-        if (\is_subclass_of($value, Arrayable::class))
+        if (\is_subclass_of($value, Collectable::class))
             $value = $value->toArray();
 
         if ($propertyType->isBuiltin()) {
