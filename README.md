@@ -1,5 +1,9 @@
 # php-dto
 
+[![PHP Composer](https://github.com/PetrenkoAnton/php-dto/actions/workflows/tests.yml/badge.svg)](https://github.com/PetrenkoAnton/php-dto/actions/workflows/tests.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/petrenkoanton/php-dto.svg?style=flat-square)](https://packagist.org/packages/petrenkoanton/php-dto)
+[![Total Downloads](https://img.shields.io/packagist/dt/petrenkoanton/php-dto.svg?style=flat-square)](https://packagist.org/packages/petrenkoanton/php-dto)
+
 ## Error codes
 // INIT    
 

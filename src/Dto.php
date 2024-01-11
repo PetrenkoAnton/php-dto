@@ -27,7 +27,7 @@ use ReflectionProperty;
 use UnitEnum;
 use ValueError;
 
-abstract class Dto implements Collectable
+abstract class Dto implements Collectable, Arrayable
 {
     /**
      * @var ReflectionProperty[]
