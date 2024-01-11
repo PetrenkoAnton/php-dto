@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Dto;
 
+use Collection\Collectable;
+use Collection\Collection;
+use Collection\Exception\CollectionException;
+use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
 use Dto\Exception\DtoException\SetupDtoException\AddDtoException;
 use ReflectionClass;
 

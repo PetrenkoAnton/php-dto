@@ -20,13 +20,14 @@ class EnumDtoTest extends TestCase
     {
         $dto = new WithEnumDto(['color' => $color = 'red']);
 
-        $this->assertEquals(ColorEnum::class, \get_class($dto->getColor()));
+        $this->assertInstanceOf(ColorEnum::class, $dto->getColor());
         $this->assertEquals($color, $dto->getColor()->value);
     }
 
     /**
      * @group ok
      * @dataProvider dpInvalidData
+     * @throws DtoException
      */
     public function testSetInvalidValueThrowsException(array $data, string $msg): void
     {

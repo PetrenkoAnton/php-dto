@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Collection\Exception\CollectionException\InvalidKeyCollectionException;
 use Dto\Exception\DtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\NestedDto;
@@ -63,6 +64,7 @@ class NestedDtoTest extends TestCase
 
     /**
      * @group ok
+     * @throws InvalidKeyCollectionException
      */
     public function testGetValueSuccess(): void
     {

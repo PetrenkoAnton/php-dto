@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dto;
 
+use Collection\Arrayable;
+use Collection\Collectable;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\HandleDtoException\GetValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\CollectionException;
+use Collection\Exception\CollectionException;
+use Collection\Exception\CollectionException\InvalidKeyCollectionException;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\SetupDtoException;
-use Dto\InvalidKeyCollectionException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\PersonDtoCollection;

@@ -1,16 +1,21 @@
 {
   "name": "petrenkoanton/php82-dto",
-  "description": "",
+  "description": "Custom dto implementation",
+  "type": "library",
+  "keywords": ["dto", "structure"],
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Anton Petrenko",
-      "email": "antptrnk@gmail.com"
+      "email": "antptrnk@gmail.com",
+      "homepage": "https://github.com/petrenkoanton",
+      "role": "Developer"
     }
   ],
   "require": {
-    "php": "^8.2"
+    "php": "^8.2",
+    "petrenkoanton/php-collection": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0"
@@ -24,5 +29,8 @@
     "psr-4": {
       "Tests\\": "tests"
     }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit -c phpunit.xml"
   }
 }

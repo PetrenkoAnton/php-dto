@@ -1,15 +1,18 @@
 version: "3.7"
 services:
-  php:
+  app:
     build:
-      args:
-        user: a
-        uid: 1000
       context: .
       dockerfile: Dockerfile
-    image: php82-dto
-    container_name: php82-dto
+    image: php80-dto
+    container_name: php-dto
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
-      - ./:/var/www
+      - ../../:/var/www
+    networks:
+      - default
+
+networks:
+  default:
+    name: php-dto
