@@ -11,8 +11,8 @@ use Dto\Exception\DtoException\HandleDtoException\GetValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\EnumNoBackingValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\MixedDeclarationException;
-use Dto\Exception\DtoException\InitDtoException\DeclarationException\NotDtoClassDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NoTypeDeclarationException;
+use Dto\Exception\DtoException\InitDtoException\DeclarationException\NotDtoClassDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NullableDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\ObjectDeclarationException;
 use Dto\Exception\DtoException\SetupDtoException\InputDataException;
@@ -25,11 +25,22 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionProperty;
+use Throwable;
 use UnitEnum;
 use ValueError;
-use function PHPUnit\Framework\assertNotNull;
 
-abstract class Dto implements Collectable, Arrayable
+use function array_column;
+use function gettype;
+use function implode;
+use function is_a;
+use function is_array;
+use function is_subclass_of;
+use function key_exists;
+use function lcfirst;
+use function str_starts_with;
+use function substr;
+
+abstract class Dto implements Arrayable, Collectable
 {
     /**
      * @var ReflectionProperty[]
@@ -37,6 +48,8 @@ abstract class Dto implements Collectable, Arrayable
     private array $properties;
 
     /**
+     * @param array<string, string> $data
+     *
      * @throws DtoException
      */
     public function __construct(array $data)
@@ -46,21 +59,21 @@ abstract class Dto implements Collectable, Arrayable
         foreach ($this->properties as $property) {
             $name = $property->getName();
 
-            if (!\key_exists($name, $data))
+            if (!key_exists($name, $data)) {
                 throw new InputDataException($this::class, $name);
+            }
 
+            /** @var ReflectionNamedType $type */
             $type = $property->getType();
+
             $value = $data[$name] ?? null;
 
             $this->validateDeclaration($property);
 
-            /** @var ReflectionNamedType $type */
-
             try {
                 $this->setValue($type, $name, $value);
-            }
-            catch (EnumBackingValueException $e) {
-                $expectedValues = \implode(', ', $e->getData());
+            } catch (EnumBackingValueException $e) {
+                $expectedValues = implode(', ', $e->getData());
 
                 throw new SetValueEnumException(
                     dto: $this::class,
@@ -68,19 +81,17 @@ abstract class Dto implements Collectable, Arrayable
                     type: $type->getName(),
                     expectedValues: $expectedValues,
                     givenType: gettype($value),
-                    value: $value
+                    value: $value,
                 );
-            }
-            catch (EnumNoBackingValueException $e) {
+            } catch (EnumNoBackingValueException $e) {
                 throw $e;
-            }
-            catch (\Throwable) {
+            } catch (Throwable) {
                 throw new SetValueException(
                     dto: $this::class,
                     property: $name,
                     expectedType: $type->getName(),
                     givenType: gettype($value),
-                    value: $value
+                    value: $value,
                 );
             }
         }
@@ -113,7 +124,7 @@ abstract class Dto implements Collectable, Arrayable
             $property->setAccessible(true);
             $value = $property->getValue($this);
 
-            $data[$property->getName()] = \is_a($value, Arrayable::class)
+            $data[$property->getName()] = is_a($value, Arrayable::class)
                 ? $value->toArray()
                 : $value;
         }
@@ -126,31 +137,38 @@ abstract class Dto implements Collectable, Arrayable
      */
     private function validateDeclaration(ReflectionProperty $property): void
     {
-        $type = $property->getType();
         $name = $property->getName();
 
-        if (!$type)
+        if (!$property->getType()) {
             throw new NoTypeDeclarationException($this::class, $name);
+        }
 
         /** @var ReflectionNamedType $type */
+        $type = $property->getType();
 
-        if ($type->getName() === 'mixed')
+        if ($type->getName() === 'mixed') {
             throw new MixedDeclarationException($this::class, $name);
+        }
 
-        if ($type->allowsNull())
+        if ($type->allowsNull()) {
             throw new NullableDeclarationException($this::class, $name);
+        }
 
-        if ($type->getName() === 'object')
+        if ($type->getName() === 'object') {
             throw new ObjectDeclarationException($this::class, $name);
+        }
 
-        if (!$type->isBuiltin() && \is_subclass_of($type->getName(), UnitEnum::class))
+        if (!$type->isBuiltin() && is_subclass_of($type->getName(), UnitEnum::class)) {
             return;
+        }
 
-        if (!$type->isBuiltin() && \is_subclass_of($type->getName(), DtoCollection::class))
+        if (!$type->isBuiltin() && is_subclass_of($type->getName(), DtoCollection::class)) {
             return;
+        }
 
-        if (!$type->isBuiltin() && !\is_subclass_of($type->getName(), Dto::class))
+        if (!$type->isBuiltin() && !is_subclass_of($type->getName(), self::class)) {
             throw new NotDtoClassDeclarationException($this::class, $name);
+        }
     }
 
     /**
@@ -158,14 +176,14 @@ abstract class Dto implements Collectable, Arrayable
      */
     private function resolveExpectedProperty(string $method): string
     {
-        if (\str_starts_with($method, 'is')) {
-            $expectedProperty = \lcfirst(\substr($method, 2));
+        if (str_starts_with($method, 'is')) {
+            $expectedProperty = lcfirst(substr($method, 2));
 
             return $this->getExpectedProperty($expectedProperty);
         }
 
-        if (\str_starts_with($method, 'get')) {
-            $expectedProperty = \lcfirst(\substr($method, 3));
+        if (str_starts_with($method, 'get')) {
+            $expectedProperty = lcfirst(substr($method, 3));
 
             return $this->getExpectedProperty($expectedProperty);
         }
@@ -179,8 +197,9 @@ abstract class Dto implements Collectable, Arrayable
     private function getExpectedProperty(string $expectedProperty): string
     {
         foreach ($this->properties as $property) {
-            if ($property->getName() === $expectedProperty)
+            if ($property->getName() === $expectedProperty) {
                 return $expectedProperty;
+            }
         }
 
         throw new InvalidArgumentException("Unexpected property: $expectedProperty");
@@ -191,25 +210,29 @@ abstract class Dto implements Collectable, Arrayable
      * @throws DtoException
      * @throws EnumBackingValueException
      */
-    private function setValue(\ReflectionNamedType $propertyType, string $propertyName, mixed $value): void
+    private function setValue(ReflectionNamedType $propertyType, string $propertyName, mixed $value): void
     {
         $typeName = $propertyType->getName();
 
-        if (\is_a($value, Arrayable::class))
+        if (is_a($value, Arrayable::class)) {
             $value = $value->toArray();
+        }
 
         if ($propertyType->isBuiltin()) {
             $this->setBuiltinType($typeName, $propertyName, $value);
+
             return;
         }
 
-        if (\is_subclass_of($typeName, UnitEnum::class)) {
+        if (is_subclass_of($typeName, UnitEnum::class)) {
             $this->setEnumValue($typeName, $propertyName, $value);
+
             return;
         }
 
-        if (\is_subclass_of($typeName, DtoCollection::class)) {
+        if (is_subclass_of($typeName, DtoCollection::class)) {
             $this->setDtoCollectionType($typeName, $propertyName, $value);
+
             return;
         }
 
@@ -221,8 +244,9 @@ abstract class Dto implements Collectable, Arrayable
      */
     private function setBuiltinType(string $typeName, string $propertyName, mixed $value): void
     {
-        if ($typeName === 'array' && !\is_array($value))
+        if ($typeName === 'array' && !is_array($value)) {
             throw new InvalidArgumentException();
+        }
 
         $this->{$propertyName} = $value;
     }
@@ -247,12 +271,15 @@ abstract class Dto implements Collectable, Arrayable
     /**
      * @throws EnumBackingValueException
      * @throws EnumNoBackingValueException
+     *
+     * @var UnitEnum $typeName
      */
     private function setEnumValue(string $typeName, string $propertyName, mixed $value): void
     {
-        /** @var UnitEnum $typeName */
         try {
-            /** @psalm-suppress UndefinedMethod */
+            /**
+             * @psalm-suppress UndefinedMethod
+             */
             $this->{$propertyName} = $typeName::from($value);
         } catch (ValueError) {
             throw new EnumBackingValueException(array_column($typeName::cases(), 'value'));

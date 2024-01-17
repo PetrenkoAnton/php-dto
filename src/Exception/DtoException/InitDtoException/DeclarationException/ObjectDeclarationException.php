@@ -14,7 +14,7 @@ final class ObjectDeclarationException extends DeclarationException
             dto: $dto,
             property: $property,
             message: 'Unsupported object property type declaration',
-            code: self::OBJECT_DECLARATION_CODE
+            code: self::OBJECT_DECLARATION_CODE,
         );
     }
 }

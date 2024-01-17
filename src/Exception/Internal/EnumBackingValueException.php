@@ -1,10 +1,13 @@
-<?php
+<?php /** @noinspection PhpCSValidationInspection */
+/** @noinspection PhpCSValidationInspection */
 
 declare(strict_types=1);
 
 namespace Dto\Exception\Internal;
 
-final class EnumBackingValueException extends \Exception
+use Exception;
+
+final class EnumBackingValueException extends Exception
 {
     public function __construct(private array $values)
     {

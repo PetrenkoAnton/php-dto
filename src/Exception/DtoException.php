@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Dto\Exception;
 
-class DtoException extends \Exception
+use Exception;
+
+class DtoException extends Exception
 {
     // INIT
     protected const NO_TYPE_DECLARATION_CODE = 101;

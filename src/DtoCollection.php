@@ -15,7 +15,7 @@ abstract class DtoCollection extends Collection
 {
     public function __construct(Dto ...$items)
     {
-        parent::__construct(... $items);
+        parent::__construct(...$items);
     }
 
     /**

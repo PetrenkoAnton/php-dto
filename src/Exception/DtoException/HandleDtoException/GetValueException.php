@@ -6,13 +6,15 @@ namespace Dto\Exception\DtoException\HandleDtoException;
 
 use Dto\Exception\DtoException\HandleDtoException;
 
+use function sprintf;
+
 final class GetValueException extends HandleDtoException
 {
     public function __construct(string $dto, string $msg)
     {
         parent::__construct(
-            message: \sprintf(
-                "Dto: %s | %s",
+            message: sprintf(
+                'Dto: %s | %s',
                 $dto,
                 $msg,
             ),
