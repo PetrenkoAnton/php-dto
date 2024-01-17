@@ -9,6 +9,9 @@ use Tests\Fixtures\Enum\ColorEnum;
 
 /**
  * @method ColorEnum getColor()
+ *
+ * @psalm-suppress PossiblyUnusedProperty
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class WithEnumDto extends Dto
 {

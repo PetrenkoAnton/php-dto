@@ -9,6 +9,9 @@ use Dto\Dto;
 /**
  * @method PersonDtoCollection getPersons()
  * @method ProductDto getProduct()
+ *
+ * @psalm-suppress PossiblyUnusedProperty
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class NestedDto extends Dto
 {

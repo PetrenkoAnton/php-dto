@@ -15,17 +15,17 @@ use Tests\Fixtures\ProductDto;
 
 class DtoCollectionTest extends TestCase
 {
-    private readonly int $aliceAge;
-    private readonly string $aliceName;
-    private readonly PersonDto $aliceDto;
+    private int $aliceAge;
+    private string $aliceName;
+    private PersonDto $aliceDto;
 
-    private readonly int $bobAge;
-    private readonly string $bobName;
+    private int $bobAge;
+    private string $bobName;
 
-    private readonly int $samAge;
-    private readonly string $samName;
+    private int $samAge;
+    private string $samName;
 
-    private readonly PersonDtoCollection $dtoCollection;
+    private PersonDtoCollection $dtoCollection;
 
     /**
      * @throws DtoException
@@ -73,17 +73,29 @@ class DtoCollectionTest extends TestCase
     {
         $this->assertCount(3, $this->dtoCollection);
 
-        $this->assertEquals($this->aliceName, $this->dtoCollection->first()->getName());
-        $this->assertEquals($this->aliceAge, $this->dtoCollection->first()->getAge());
+        $personDto = $this->dtoCollection->first();
+        /** @var PersonDto $personDto */
 
-        $this->assertEquals($this->aliceName, $this->dtoCollection->getItem(0)->getName());
-        $this->assertEquals($this->aliceAge, $this->dtoCollection->getItem(0)->getAge());
+        $this->assertEquals($this->aliceName, $personDto->getName());
+        $this->assertEquals($this->aliceAge, $personDto->getAge());
 
-        $this->assertEquals($this->bobName, $this->dtoCollection->getItem(1)->getName());
-        $this->assertEquals($this->bobAge, $this->dtoCollection->getItem(1)->getAge());
+        $personDto = $this->dtoCollection->getItem(0);
+        /** @var PersonDto $personDto */
 
-        $this->assertEquals($this->samName, $this->dtoCollection->getItem(2)->getName());
-        $this->assertEquals($this->samAge, $this->dtoCollection->getItem(2)->getAge());
+        $this->assertEquals($this->aliceName, $personDto->getName());
+        $this->assertEquals($this->aliceAge, $personDto->getAge());
+
+        $personDto = $this->dtoCollection->getItem(1);
+        /** @var PersonDto $personDto */
+
+        $this->assertEquals($this->bobName, $personDto->getName());
+        $this->assertEquals($this->bobAge, $personDto->getAge());
+
+        $personDto = $this->dtoCollection->getItem(2);
+        /** @var PersonDto $personDto */
+
+        $this->assertEquals($this->samName, $personDto->getName());
+        $this->assertEquals($this->samAge, $personDto->getAge());
     }
 
     /**

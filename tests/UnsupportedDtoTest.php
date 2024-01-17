@@ -16,7 +16,7 @@ use Tests\Fixtures\Unsupported\RandomClassDeclarationDto;
 
 class UnsupportedDtoTest extends TestCase
 {
-    private readonly array $data;
+    private array $data;
 
     public function setUp(): void
     {

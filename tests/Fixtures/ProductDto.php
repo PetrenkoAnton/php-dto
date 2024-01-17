@@ -11,6 +11,9 @@ use Dto\Dto;
  * @method string getType()
  * @method array getInfo()
  * @method bool isAvailable()
+ *
+ * @psalm-suppress PossiblyUnusedProperty
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class ProductDto extends Dto
 {

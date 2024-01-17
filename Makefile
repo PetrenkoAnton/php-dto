@@ -13,6 +13,10 @@ inside:
 	docker exec -it ${CONTAINER_NAME} /bin/bash
 .PHONY: inside
 
+up80:
+	docker-compose -f docker/docker-compose-php80.yml up -d
+.PHONY: up80
+
 up81:
 	docker-compose -f docker/docker-compose-php81.yml up -d
 .PHONY: up81

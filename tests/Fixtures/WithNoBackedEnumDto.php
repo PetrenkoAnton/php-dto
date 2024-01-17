@@ -10,6 +10,9 @@ use Tests\Fixtures\Enum\NoBackedColorEnum;
 
 /**
  * @method ColorEnum getColor()
+ *
+ * @psalm-suppress PossiblyUnusedProperty
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class WithNoBackedEnumDto extends Dto
 {

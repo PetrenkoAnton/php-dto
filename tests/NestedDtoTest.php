@@ -8,23 +8,24 @@ use Collection\Exception\CollectionException\InvalidKeyCollectionException;
 use Dto\Exception\DtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\NestedDto;
+use Tests\Fixtures\PersonDto;
 
 class NestedDtoTest extends TestCase
 {
-    private readonly string $aliceName;
-    private readonly int $aliceAge;
+    private string $aliceName;
+    private int $aliceAge;
 
-    private readonly string $bobName;
-    private readonly int $bobAge;
+    private string $bobName;
+    private int $bobAge;
 
-    private readonly int $price;
-    private readonly string $type;
-    private readonly array $info;
-    private readonly bool $available;
+    private int $price;
+    private string $type;
+    private array $info;
+    private bool $available;
 
-    private readonly array $data;
+    private array $data;
 
-    private readonly NestedDto $dto;
+    private NestedDto $dto;
 
     /**
      * @throws DtoException
@@ -70,14 +71,23 @@ class NestedDtoTest extends TestCase
     {
         $this->assertCount(2, $this->dto->getPersons());
 
-        $this->assertEquals($this->aliceName, $this->dto->getPersons()->first()->getName());
-        $this->assertEquals($this->aliceAge, $this->dto->getPersons()->first()->getAge());
+        $personDto = $this->dto->getPersons()->first();
+        /** @var PersonDto $personDto */
 
-        $this->assertEquals($this->aliceName, $this->dto->getPersons()->getItem(0)->getName());
-        $this->assertEquals($this->aliceAge, $this->dto->getPersons()->getItem(0)->getAge());
+        $this->assertEquals($this->aliceName, $personDto->getName());
+        $this->assertEquals($this->aliceAge, $personDto->getAge());
 
-        $this->assertEquals($this->bobName, $this->dto->getPersons()->getItem(1)->getName());
-        $this->assertEquals($this->bobAge, $this->dto->getPersons()->getItem(1)->getAge());
+        $personDto = $this->dto->getPersons()->getItem(0);
+        /** @var PersonDto $personDto */
+
+        $this->assertEquals($this->aliceName, $personDto->getName());
+        $this->assertEquals($this->aliceAge, $personDto->getAge());
+
+        $personDto = $this->dto->getPersons()->getItem(1);
+        /** @var PersonDto $personDto */
+
+        $this->assertEquals($this->bobName, $personDto->getName());
+        $this->assertEquals($this->bobAge, $personDto->getAge());
 
         $this->assertEquals($this->price, $this->dto->getProduct()->getPrice());
         $this->assertEquals($this->type, $this->dto->getProduct()->getType());

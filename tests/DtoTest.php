@@ -11,9 +11,9 @@ use Tests\Fixtures\ProductDto;
 
 class DtoTest extends TestCase
 {
-    private readonly string $name;
-    private readonly int $age;
-    private readonly PersonDto $dto;
+    private string $name;
+    private int $age;
+    private PersonDto $dto;
 
     /**
      * @throws DtoException

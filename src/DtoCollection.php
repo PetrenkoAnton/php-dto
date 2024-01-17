@@ -9,7 +9,7 @@ use Collection\Collection;
 use Collection\Exception\CollectionException;
 use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
 use Dto\Exception\DtoException\SetupDtoException\AddDtoException;
-use ReflectionClass;
+use ReflectionException;
 
 abstract class DtoCollection extends Collection
 {
@@ -21,13 +21,14 @@ abstract class DtoCollection extends Collection
     /**
      * @throws CollectionException
      * @throws AddDtoException
+     * @throws ReflectionException
      */
     public function add(Collectable $item): void
     {
         try {
             parent::add($item);
         } catch (InvalidItemTypeCollectionException) {
-            $expectedDto = (new ReflectionClass($this))->getConstructor()->getParameters()[0]->getType()->getName();
+            $expectedDto = Helper::getConstructorFirstParameterClassName($this);
 
             throw new AddDtoException($this::class, $expectedDto, $item::class);
         }
