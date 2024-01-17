@@ -22,7 +22,7 @@ abstract class DtoCollection extends Collection
      * @throws CollectionException
      * @throws AddDtoException
      */
-    public function add(Collectable $item)
+    public function add(Collectable $item): void
     {
         try {
             parent::add($item);
