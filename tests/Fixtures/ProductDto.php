@@ -18,9 +18,6 @@ class ProductDto extends Dto
 {
     protected int $price;
     protected string $type;
-    /**
-     * @var array<mixed> $info
-     */
     protected array $info;
     protected bool $available;
 }

@@ -32,6 +32,7 @@ class UnsupportedDtoTest extends TestCase
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
+            // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\NoDeclarationDto | Property: name | Err: Mission property type declaration',
         );
         $this->expectExceptionCode(101);
@@ -47,6 +48,7 @@ class UnsupportedDtoTest extends TestCase
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
+            // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\MixedDeclarationDto | Property: name | Err: Unsupported mixed property type declaration',
         );
         $this->expectExceptionCode(103);
@@ -62,6 +64,7 @@ class UnsupportedDtoTest extends TestCase
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
+            // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\NullableDeclarationDto | Property: name | Err: Unsupported nullable property type declaration',
         );
         $this->expectExceptionCode(102);
@@ -77,6 +80,7 @@ class UnsupportedDtoTest extends TestCase
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
+            // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\ObjectDeclarationDto | Property: name | Err: Unsupported object property type declaration',
         );
         $this->expectExceptionCode(104);
@@ -92,6 +96,7 @@ class UnsupportedDtoTest extends TestCase
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
+            // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\RandomClassDeclarationDto | Property: name | Err: Class must implement DtoInterface',
         );
         $this->expectExceptionCode(105);
