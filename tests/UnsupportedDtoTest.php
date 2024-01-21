@@ -24,70 +24,75 @@ class UnsupportedDtoTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      */
     public function testMissingPropertyTypeDeclarationThrowsException(): void
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
-            'Dto: Tests\Fixtures\Unsupported\NoDeclarationDto | Property: name | Err: Mission property type declaration'
+            'Dto: Tests\Fixtures\Unsupported\NoDeclarationDto | Property: name | Err: Mission property type declaration',
         );
         $this->expectExceptionCode(101);
         new NoDeclarationDto($this->data);
     }
 
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      */
     public function testMixedPropertyTypeDeclarationThrowsException(): void
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
-            'Dto: Tests\Fixtures\Unsupported\MixedDeclarationDto | Property: name | Err: Unsupported mixed property type declaration'
+            'Dto: Tests\Fixtures\Unsupported\MixedDeclarationDto | Property: name | Err: Unsupported mixed property type declaration',
         );
         $this->expectExceptionCode(103);
         new MixedDeclarationDto($this->data);
     }
 
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      */
     public function testNullablePropertyTypeDeclarationThrowsException(): void
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
-            'Dto: Tests\Fixtures\Unsupported\NullableDeclarationDto | Property: name | Err: Unsupported nullable property type declaration'
+            'Dto: Tests\Fixtures\Unsupported\NullableDeclarationDto | Property: name | Err: Unsupported nullable property type declaration',
         );
         $this->expectExceptionCode(102);
         new NullableDeclarationDto($this->data);
     }
 
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      */
     public function testObjectPropertyTypeDeclarationThrowsException(): void
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
-            'Dto: Tests\Fixtures\Unsupported\ObjectDeclarationDto | Property: name | Err: Unsupported object property type declaration'
+            'Dto: Tests\Fixtures\Unsupported\ObjectDeclarationDto | Property: name | Err: Unsupported object property type declaration',
         );
         $this->expectExceptionCode(104);
         new ObjectDeclarationDto($this->data);
     }
 
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      */
     public function testRandomClassPropertyTypeDeclarationThrowsException(): void
     {
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
-            'Dto: Tests\Fixtures\Unsupported\RandomClassDeclarationDto | Property: name | Err: Class must implement DtoInterface'
+            'Dto: Tests\Fixtures\Unsupported\RandomClassDeclarationDto | Property: name | Err: Class must implement DtoInterface',
         );
         $this->expectExceptionCode(105);
         new RandomClassDeclarationDto(['name' => new RandomClass()]);

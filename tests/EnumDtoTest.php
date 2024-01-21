@@ -13,8 +13,9 @@ use Tests\Fixtures\WithEnumDto;
 class EnumDtoTest extends TestCase
 {
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      */
     public function testGetValueSuccess(): void
     {
@@ -25,9 +26,10 @@ class EnumDtoTest extends TestCase
     }
 
     /**
+     * @throws DtoException
+     *
      * @group ok
      * @dataProvider dpInvalidData
-     * @throws DtoException
      */
     public function testSetInvalidValueThrowsException(array $data, string $msg): void
     {
@@ -44,18 +46,21 @@ class EnumDtoTest extends TestCase
                 [
                     'color' => 'green',
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\Enum\ColorEnum | Expected values: red, black, white | Given type: string | Value: "green"',
             ],
             [
                 [
                     'color' => 'blue',
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\Enum\ColorEnum | Expected values: red, black, white | Given type: string | Value: "blue"',
             ],
             [
                 [
                     'color' => '',
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\WithEnumDto | Property: color | Enum: Tests\Fixtures\Enum\ColorEnum | Expected values: red, black, white | Given type: string | Value: ""',
             ],
         ];

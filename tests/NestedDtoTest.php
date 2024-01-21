@@ -38,7 +38,7 @@ class NestedDtoTest extends TestCase
             999,
             'ticket',
             ['key' => 'value'],
-            true
+            true,
         ];
 
         $this->data = [
@@ -56,7 +56,7 @@ class NestedDtoTest extends TestCase
                 'price' => $this->price,
                 'type' => $this->type,
                 'info' => $this->info,
-                'available' => $this->available
+                'available' => $this->available,
             ],
         ];
 
@@ -64,8 +64,9 @@ class NestedDtoTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws InvalidKeyCollectionException
+     *
+     * @group ok
      */
     public function testGetValueSuccess(): void
     {

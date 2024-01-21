@@ -9,7 +9,6 @@ use Tests\Fixtures\Enum\ColorEnum;
 
 /**
  * @method ColorEnum getColor()
- *
  * @psalm-suppress PossiblyUnusedProperty
  * @psalm-suppress PropertyNotSetInConstructor
  */

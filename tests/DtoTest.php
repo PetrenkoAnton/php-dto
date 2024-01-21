@@ -51,6 +51,9 @@ class DtoTest extends TestCase
         $this->dto->$getter();
     }
 
+    /**
+     * @return string[][]
+     */
     public function dpInvalidGetters(): array
     {
         return [
@@ -61,8 +64,9 @@ class DtoTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      * @dataProvider dpInvalidData
      */
     public function testSetInvalidValueThrowsDtoException(array $data, string $message): void
@@ -81,6 +85,7 @@ class DtoTest extends TestCase
                     'name' => null,
                     'age' => 25,
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\PersonDto | Property: name | Expected type: string | Given type: NULL | Value: null',
             ],
             [
@@ -88,6 +93,7 @@ class DtoTest extends TestCase
                     'name' => 'Alice',
                     'age' => false,
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: boolean | Value: false',
             ],
             [
@@ -95,6 +101,7 @@ class DtoTest extends TestCase
                     'name' => 123,
                     'age' => 25,
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\PersonDto | Property: name | Expected type: string | Given type: integer | Value: 123',
             ],
             [
@@ -102,6 +109,7 @@ class DtoTest extends TestCase
                     'name' => 'Alice',
                     'age' => 25.002,
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: double | Value: 25.002',
             ],
             [
@@ -109,24 +117,29 @@ class DtoTest extends TestCase
                     'name' => [],
                     'age' => 25,
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\PersonDto | Property: name | Expected type: string | Given type: array | Value: []',
             ],
             [
                 [
                     'name' => 'Alice',
-                    'age' => new class{public int $age = 25;},
+                    'age' => new class {
+                        public int $age = 25;
+                    },
                 ],
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\PersonDto | Property: age | Expected type: int | Given type: object | Value: {"age":25}',
             ],
         ];
     }
 
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      * @dataProvider dpInvalidArrayData
      */
-    public function testSetInvalidArrayValueThrowsDtoException(int|bool $info, string $message): void
+    public function testSetInvalidArrayValueThrowsDtoException(int | bool $info, string $message): void
     {
         $data = [
             'price' => 999,
@@ -147,10 +160,12 @@ class DtoTest extends TestCase
         return [
             [
                 123,
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\ProductDto | Property: info | Expected type: array | Given type: integer | Value: 123',
             ],
             [
                 true,
+                // phpcs:ignore
                 'Dto: Tests\Fixtures\ProductDto | Property: info | Expected type: array | Given type: boolean | Value: true',
             ],
         ];

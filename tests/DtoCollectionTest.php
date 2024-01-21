@@ -39,7 +39,7 @@ class DtoCollectionTest extends TestCase
             'name' => $this->aliceName,
             'age' => $this->aliceAge,
         ];
-        
+
         $this->aliceDto = new PersonDto($aliceData);
 
         [$this->bobName, $this->bobAge] = ['Bob', 30];
@@ -65,9 +65,10 @@ class DtoCollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws DtoException
      * @throws CollectionException
+     *
+     * @group ok
      */
     public function testAddMethodSuccess(): void
     {
@@ -99,8 +100,9 @@ class DtoCollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws CollectionException
+     *
+     * @group ok
      * @dataProvider dpInvalidKeys
      */
     public function testGetMethodThrowsInvalidKeyCollectionException(int $key): void
@@ -124,9 +126,10 @@ class DtoCollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws DtoException
      * @throws CollectionException
+     *
+     * @group ok
      */
     public function testAddMethodThrowsSetupDtoException(): void
     {
@@ -145,6 +148,7 @@ class DtoCollectionTest extends TestCase
         $this->assertCount(1, $dtoCollection);
 
         $this->expectException(SetupDtoException::class);
+        // phpcs:ignore
         $this->expectExceptionMessage('DtoCollection: Tests\Fixtures\PersonDtoCollection | Expected Dto: Tests\Fixtures\PersonDto | Given Dto: Tests\Fixtures\ProductDto');
         $this->expectExceptionCode(201);
         $dtoCollection->add($productDto);

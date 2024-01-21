@@ -15,5 +15,6 @@ class NoDeclarationDto extends Dto
     /**
      * @psalm-suppress MissingPropertyType
      */
+    // phpcs:ignore
     protected $name;
 }

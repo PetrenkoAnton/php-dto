@@ -12,12 +12,14 @@ use Tests\Fixtures\WithNoBackedEnumDto;
 class NoBackedEnumDtoTest extends TestCase
 {
     /**
-     * @group ok
      * @throws DtoException
+     *
+     * @group ok
      */
     public function testGetValueSuccess(): void
     {
         $this->expectException(InitDtoException::class);
+        // phpcs:ignore
         $this->expectExceptionMessage('Dto: Tests\Fixtures\WithNoBackedEnumDto | Property: color | Err: No backing value for enum');
         $this->expectExceptionCode(106);
         new WithNoBackedEnumDto(['color' => 'red']);

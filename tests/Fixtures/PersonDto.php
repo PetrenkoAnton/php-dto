@@ -9,7 +9,6 @@ use Dto\Dto;
 /**
  * @method string getName()
  * @method int getAge()
- *
  * @psalm-suppress PossiblyUnusedProperty
  * @psalm-suppress PropertyNotSetInConstructor
 */

@@ -9,5 +9,8 @@ namespace Dto;
  */
 interface DtoFactoryInterface
 {
+    /**
+     * @param array<string,mixed> $data
+     */
     public function create(array $data): Dto;
 }

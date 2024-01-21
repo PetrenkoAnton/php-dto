@@ -48,7 +48,7 @@ abstract class Dto implements Arrayable, Collectable
     private array $properties;
 
     /**
-     * @param array<string, string> $data
+     * @param array<string,mixed> $data
      *
      * @throws DtoException
      */
@@ -98,6 +98,8 @@ abstract class Dto implements Arrayable, Collectable
     }
 
     /**
+     * @param array<mixed,mixed> $arguments
+     *
      * @throws GetValueException
      *
      * @psalm-suppress PossiblyUnusedParam
@@ -113,6 +115,9 @@ abstract class Dto implements Arrayable, Collectable
         return $this->{$property};
     }
 
+    /**
+     * @return array<string,mixed> array
+     */
     public function toArray(): array
     {
         $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED);
@@ -252,6 +257,8 @@ abstract class Dto implements Arrayable, Collectable
     }
 
     /**
+     * @param array<string,mixed> $values
+     *
      * @throws ReflectionException
      */
     private function setDtoCollectionType(string $typeName, string $propertyName, array $values): void
@@ -271,10 +278,8 @@ abstract class Dto implements Arrayable, Collectable
     /**
      * @throws EnumBackingValueException
      * @throws EnumNoBackingValueException
-     *
-     * @var UnitEnum $typeName
      */
-    private function setEnumValue(string $typeName, string $propertyName, mixed $value): void
+    private function setEnumValue(string | UnitEnum $typeName, string $propertyName, mixed $value): void
     {
         try {
             /**
@@ -288,6 +293,9 @@ abstract class Dto implements Arrayable, Collectable
         }
     }
 
+    /**
+     * @param array<string,mixed> $value
+     */
     private function createObject(string $class, array $value): object
     {
         return new $class($value);
