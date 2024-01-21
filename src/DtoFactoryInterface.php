@@ -10,7 +10,7 @@ namespace Dto;
 interface DtoFactoryInterface
 {
     /**
-     * @param array<string,mixed> $data
+     * @throws DtoException
      */
     public function create(array $data): Dto;
 }

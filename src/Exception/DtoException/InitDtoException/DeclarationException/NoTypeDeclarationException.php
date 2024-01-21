@@ -13,7 +13,7 @@ final class NoTypeDeclarationException extends DeclarationException
         parent::__construct(
             dto: $dto,
             property: $property,
-            message: 'Mission property type declaration',
+            message: 'Missed property type declaration',
             code: self::NO_TYPE_DECLARATION_CODE,
         );
     }

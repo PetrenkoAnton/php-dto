@@ -17,9 +17,9 @@ class Helper
      */
     public static function getConstructorFirstParameterClassName(string | object $class): string
     {
+        /** @var ReflectionNamedType $type */
         $type = (new ReflectionClass($class))->getConstructor()->getParameters()[0]->getType();
 
-        /** @var ReflectionNamedType $type */
         return $type->getName();
     }
 }

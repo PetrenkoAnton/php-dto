@@ -29,15 +29,49 @@ composer require petrenkoanton/php-dto
 
 ### Public methods
 
-| Method | Exception |
-|:-------|:----------|
-|        |           |
+#### [Dto](./src/Dto.php)
+
+| Method                                        | Exception         |
+|:----------------------------------------------|:------------------|
+| __construct(array $data)                      | DtoException      |
+| __call(string $name, array $arguments): mixed | GetValueException |
+| toArray(): array                              | -                 |
+
+#### [DtoCollection](./src/DtoCollection.php)
+
+| Method                         | Exception       |
+|:-------------------------------|:----------------|
+| __construct(Dto ...$items)     | DtoException    |
+| add(Collectable $item): void   | AddDtoException |
+
+#### [DtoFactoryInterface](./src/DtoFactoryInterface.php)
+
+| Method                    | Exception       |
+|:--------------------------|:----------------|
+| create(array $data): Dto; | -               |
 
 ### Exceptions
 
-| Exception | Parent | Message pattern | Code |
-|:----------|:-------|:----------------|------|
-|           |        |                 |      |
+Main exception is [DtoException](./src/Exception/DtoException.php). 
+
+There are 3 groups of exceptions: 
+- [InitDtoException](./src/Exception/DtoException/InitDtoException.php)
+- [SetupDtoException](./src/Exception/DtoException/SetupDtoException.php)
+- [HandleDtoException](./src/Exception/DtoException/HandleDtoException.php)
+
+| Code | Message pattern                                                                                               | Exception                       | Group              |
+|------|:--------------------------------------------------------------------------------------------------------------|:--------------------------------|:-------------------|
+| 101  | Dto: %s &#124; Property: %s &#124; Err: Missed property type declaration                                      | NoTypeDeclarationException      | InitDtoException   |
+| 102  | Dto: %s &#124; Property: %s &#124; Err: Unsupported nullable property type declaration                        | NullableDeclarationException    | InitDtoException   |
+| 103  | Dto: %s &#124; Property: %s &#124; Err: Unsupported mixed property type declaration                           | MixedDeclarationException       | InitDtoException   |
+| 104  | Dto: %s &#124; Property: %s &#124; Err: Unsupported object property type declaration                          | ObjectDeclarationException      | InitDtoException   |
+| 105  | Dto: %s &#124; Property: %s &#124; Err: Class must implement DtoInterface                                     | NotDtoClassDeclarationException | InitDtoException   |
+| 106  | Dto: %s &#124; Property: %s &#124; Err: No backing value for enum                                             | EnumNoBackingValueException     | InitDtoException   |
+| 201  | DtoCollection: %s &#124; Expected Dto: %s &#124; Given Dto: %s                                                | AddDtoException                 | SetupDtoException  |
+| 202  | Dto: %s &#124; Property: %s &#124; Err: No data                                                               | InputDataException              | SetupDtoException  |
+| 203  | Dto: %s &#124; Property: %s &#124; Expected type: %s &#124; Given type: %s &#124; Value: %s                   | SetValueException               | SetupDtoException  |
+| 204  | Dto: %s &#124; Property: %s &#124; Enum: %s &#124; Expected values: %s &#124; Given type: %s &#124; Value: %s | SetValueEnumException           | SetupDtoException  |
+| 301  | Dto: %s &#124; %s                                                                                             | GetValueException               | HandleDtoException |
 
 ## Usage
 

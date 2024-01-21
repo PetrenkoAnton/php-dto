@@ -48,8 +48,6 @@ abstract class Dto implements Arrayable, Collectable
     private array $properties;
 
     /**
-     * @param array<string,mixed> $data
-     *
      * @throws DtoException
      */
     public function __construct(array $data)
@@ -98,8 +96,6 @@ abstract class Dto implements Arrayable, Collectable
     }
 
     /**
-     * @param array<mixed,mixed> $arguments
-     *
      * @throws GetValueException
      *
      * @psalm-suppress PossiblyUnusedParam
@@ -115,9 +111,6 @@ abstract class Dto implements Arrayable, Collectable
         return $this->{$property};
     }
 
-    /**
-     * @return array<string,mixed> array
-     */
     public function toArray(): array
     {
         $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED);
@@ -257,8 +250,6 @@ abstract class Dto implements Arrayable, Collectable
     }
 
     /**
-     * @param array<string,mixed> $values
-     *
      * @throws ReflectionException
      */
     private function setDtoCollectionType(string $typeName, string $propertyName, array $values): void
@@ -293,9 +284,6 @@ abstract class Dto implements Arrayable, Collectable
         }
     }
 
-    /**
-     * @param array<string,mixed> $value
-     */
     private function createObject(string $class, array $value): object
     {
         return new $class($value);
