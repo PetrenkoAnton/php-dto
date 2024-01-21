@@ -31,7 +31,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Coding style validation using Psalm
-        run: ./vendor/bin/psalm --config=./psalm.xml --show-info=true --shepherd
+        run: ./vendor/bin/psalm --show-info=true --shepherd
 
       - name: Coding style validation using PHP_CodeSniffer
         run: ./vendor/bin/phpcs --no-cache -v
