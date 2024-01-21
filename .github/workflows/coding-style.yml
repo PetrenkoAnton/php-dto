@@ -1,0 +1,37 @@
+name: coding-style
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  coding-style:
+    name: Coding style validation using Psalm and PHP_CodeSniffer
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    strategy:
+      fail-fast: true
+      matrix:
+        php:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up php${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Install dependencies with Composer
+        uses: ramsey/composer-install@v2
+
+      - name: Coding style validation using Psalm
+        run: ./vendor/bin/psalm --show-info=true --shepherd
+
+      - name: Coding style validation using PHP_CodeSniffer
+        run: ./vendor/bin/phpcs --no-cache -v
