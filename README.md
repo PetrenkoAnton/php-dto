@@ -240,7 +240,9 @@ $aliceDto = $nestedDto->getPersons()->first();
 $aliceName = $aliceDto->getName(); // 'Alice'
 $aliceAge = $aliceDto->getAge(); // 25
 
-$bobDto = $nestedDto->getPersons()->filter(fn (PersonDto $personDto) => $personDto->getName() === 'Bob')->first();
+$bobDto = $nestedDto->getPersons()->filter(
+    fn (PersonDto $personDto) => $personDto->getName() === 'Bob'
+)->first();
 $bobName = $bobDto->getName(); // 'Bob'
 $bobAge = $bobDto->getAge(); // '30'
 
