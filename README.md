@@ -42,10 +42,21 @@ All getters are provided using the `__call()` magic method.
 
 #### [DtoCollection](./src/DtoCollection.php)
 
-| Method                       | Exception    |
-|:-----------------------------|:-------------|
-| __construct(Dto ...$items)   | DtoException |
-| add(Collectable $item): void | DtoException |
+| Method                                 | Exception           |
+|:---------------------------------------|:--------------------|
+| __construct(Dto ...$items)             | DtoException        |
+| add(Collectable $item): void           | DtoException        |
+
+#### Parent [Collection](https://github.com/PetrenkoAnton/php-collection)
+[github.com/PetrenkoAnton/php-collection](https://github.com/PetrenkoAnton/php-collection)
+
+| Method                                 | Exception           |
+|:---------------------------------------|:--------------------|
+| filter(callable $callback): Collection | -                   |
+| getItems(): array                      | -                   |
+| getItem(int $key): Collectable         | CollectionException |
+| first(): Collectable                   | CollectionException |
+| count(): int                           | -                   |
 
 ### Exceptions
 
@@ -101,13 +112,6 @@ class ProductDto extends Dto
     protected bool $available;
 }
 
-```
-
-```php
-<?php
-
-declare(strict_types=1);
-
 // Array or instance of Arrayable interface:
 $info = [
     'key' => 'value',
@@ -125,9 +129,130 @@ $dto = new ProductDto($data);
 $price = $dto->getPrice(); // 999
 $type = $dto->getType(); // 'ticket'
 $info = $dto->getInfo(); // ['key' => 'value']
-$available = $dto->isAvailable()(); // true
-
+$available = $dto->isAvailable(); // true
 ```
+
+#### Nested DTO (with Collection and Enum)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Collection\Arrayable;
+use Dto\Dto;
+use Dto\DtoCollection;
+
+/**
+ * @method string getName()
+ * @method int getAge()
+*/
+class PersonDto extends Dto
+{
+    protected string $name;
+    protected int $age;
+}
+
+class PersonDtoCollection extends DtoCollection
+{
+    public function __construct(PersonDto ...$items)
+    {
+        parent::__construct(...$items);
+    }
+}
+
+/**
+ * @method int getPrice()
+ * @method string getType()
+ * @method array getInfo()
+ * @method bool isAvailable()
+ */
+class ProductDto extends Dto
+{
+    protected int $price;
+    protected string $type;
+    protected array $info;
+    protected bool $available;
+}
+
+enum ColorEnum: string
+{
+    case Red = 'red';
+    case Black = 'black';
+    case White = 'white';
+}
+
+/**
+ * @method PersonDtoCollection getPersons()
+ * @method ProductDto getProduct()
+ * @method ColorEnum getColor()
+ */
+class NestedDto extends Dto
+{
+    protected PersonDtoCollection $persons;
+    protected ProductDto $product;
+    protected ColorEnum $color;
+}
+
+class NestedDtoFactory
+{
+    public function create(array $data): NestedDto
+    {
+        return new NestedDto($data);
+    }
+}
+
+class InfoArrayable implements Arrayable
+{
+    public function toArray(): array
+    {
+        return [
+            'key' => 'value',
+        ];
+    }
+}
+
+$data = [
+    'persons' => [
+        [
+            'name' => 'Alice',
+            'age' => 25,
+        ],
+        [
+            'name' => 'Bob',
+            'age' => 30,
+        ],
+    ],
+    'product' => [
+        'price' => 999,
+        'type' => 'ticket',
+        'info' => new InfoArrayable(),
+        'available' => true,
+    ],
+    'color' => 'red',
+];
+
+$nestedDto = (new NestedDtoFactory())->create($data);
+
+$personsCount = $nestedDto->getPersons()->count() // 2
+
+$aliceDto = $nestedDto->getPersons()->first();
+$aliceName = $aliceDto->getName(); // 'Alice'
+$aliceAge = $aliceDto->getAge(); // 25
+
+$bobDto = $nestedDto->getPersons()->filter(fn (PersonDto $personDto) => $personDto->getName() === 'Bob')->first();
+$bobName = $bobDto->getName(); // 'Bob'
+$bobAge = $bobDto->getAge(); // '30'
+
+$productDto = $nestedDto->getProduct();
+$productPrice = $productDto->getPrice(); // 999
+$productInfo = $productDto->getInfo(); // ['key' => 'value']
+
+$color = $nestedDto->getColor(); // ColorEnum::Red
+$colorValue = $colorEnum->value; // 'red'
+```
+
+
 
 ## For developers
 
@@ -188,12 +313,12 @@ make v
 
 ### Run tests and linters
 
-Run [PHPUnit](https://phpunit.de/) tests with code coverage
+Run [PHPUnit](https://github.com/sebastianbergmann/phpunit/) tests with code coverage
 ```bash
 make test-c 
 ```
 
-Run [Psalm](https://psalm.dev/)
+Run [Psalm](https://github.com/vimeo/psalm)
 ```bash
 make psalm
 ```
