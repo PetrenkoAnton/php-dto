@@ -266,7 +266,7 @@ Utils:
 
 #### Initialize
 
-Create ./docker/.env
+Create `./docker/.env`
 ```bash
 make init 
 ```
