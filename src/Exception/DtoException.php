@@ -15,6 +15,7 @@ class DtoException extends Exception
     protected const OBJECT_DECLARATION_CODE = 104;
     protected const NOT_DTO_CLASS_DECLARATION_CODE = 105;
     protected const ENUM_NO_BACKING_VALUE_CODE = 106;
+    protected const INVALID_DTO_COLLECTION_CONSTRUCTOR_CODE = 107;
     // SETUP
     protected const ADD_DTO_EXCEPTION = 201;
     protected const EMPTY_INPUT_DATA_CODE = 202;

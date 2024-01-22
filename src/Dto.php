@@ -180,9 +180,7 @@ abstract class Dto implements Arrayable, Collectable
             return $this->getExpectedProperty($expectedProperty);
         }
 
-        if (str_starts_with($method, 'get')) {
-            $expectedProperty = lcfirst(substr($method, 3));
-
+        if (str_starts_with($method, 'get') && $expectedProperty = lcfirst(substr($method, 3))) {
             return $this->getExpectedProperty($expectedProperty);
         }
 
@@ -256,7 +254,7 @@ abstract class Dto implements Arrayable, Collectable
     {
         $collection = new $typeName();
 
-        $class = Helper::getConstructorFirstParameterClassName($typeName);
+        $class = Helper::getConstructorFirstParameterClassName($collection);
 
         foreach ($values as $value) {
             $item = $this->createObject($class, $value);

@@ -31,33 +31,27 @@ composer require petrenkoanton/php-dto
 
 #### [Dto](./src/Dto.php)
 
-| Method                                        | Exception         |
-|:----------------------------------------------|:------------------|
-| __construct(array $data)                      | DtoException      |
-| __call(string $name, array $arguments): mixed | GetValueException |
-| toArray(): array                              | -                 |
+All getters are provided using the `__call()` magic method.
+
+| Method                                        | Exception    |
+|:----------------------------------------------|:-------------|
+| __construct(array $data)                      | DtoException |
+| __call(string $name, array $arguments): mixed | DtoException |
+| toArray(): array                              | -            |
 
 #### [DtoCollection](./src/DtoCollection.php)
 
-| Method                         | Exception       |
-|:-------------------------------|:----------------|
-| __construct(Dto ...$items)     | DtoException    |
-| add(Collectable $item): void   | AddDtoException |
-
-#### [DtoFactoryInterface](./src/DtoFactoryInterface.php)
-
-| Method                    | Exception       |
-|:--------------------------|:----------------|
-| create(array $data): Dto; | -               |
+| Method                       | Exception    |
+|:-----------------------------|:-------------|
+| __construct(Dto ...$items)   | DtoException |
+| add(Collectable $item): void | DtoException |
 
 ### Exceptions
 
-Main exception is [DtoException](./src/Exception/DtoException.php). 
+Main library exception is [DtoException](./src/Exception/DtoException.php). 
 
-There are 3 groups of exceptions: 
-- [InitDtoException](./src/Exception/DtoException/InitDtoException.php)
-- [SetupDtoException](./src/Exception/DtoException/SetupDtoException.php)
-- [HandleDtoException](./src/Exception/DtoException/HandleDtoException.php)
+There are [3 groups of exceptions](./src/Exception/DtoException): InitDtoException, SetupDtoException and 
+HandleDtoException
 
 | Code | Message pattern                                                                                               | Exception                       | Group              |
 |------|:--------------------------------------------------------------------------------------------------------------|:--------------------------------|:-------------------|
@@ -135,3 +129,7 @@ composer check-all
 
 The [php-dto](https://github.com/PetrenkoAnton/php-dto/) library is open-sourced software licensed under the 
 [MIT license](https://opensource.org/licenses/MIT).
+
+## Related projects
+
+- [PetrenkoAnton/php-collection](https://github.com/PetrenkoAnton/php-collection)
