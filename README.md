@@ -254,8 +254,6 @@ $color = $nestedDto->getColor(); // ColorEnum::Red
 $colorValue = $colorEnum->value; // 'red'
 ```
 
-
-
 ## For developers
 
 ### Requirements
@@ -296,7 +294,7 @@ It will remove network and previously created container.
 make down
 ```
 
-#### Other commands:
+#### Other commands
 
 Go inside of the container
 ```bash
@@ -315,7 +313,7 @@ make v
 
 ### Run tests and linters
 
-Run [PHPUnit](https://github.com/sebastianbergmann/phpunit/) tests with code coverage
+Run [PHPUnit](https://github.com/sebastianbergmann/phpunit) tests with code coverage
 ```bash
 make test-c 
 ```
@@ -330,7 +328,7 @@ Run [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
 make phpcs
 ```
 
-Or by all-in-one command from the inside of the container: 
+Or by all-in-one command from the inside of the container
 
 ```bash
 composer check-all
