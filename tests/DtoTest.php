@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Collection\Arrayable;
 use Dto\Exception\DtoException;
+use Dto\Exception\DtoException\HandleDtoException\GetValueException;
+use Dto\Exception\DtoException\SetupDtoException\InputDataException;
 use PHPUnit\Framework\TestCase;
+use Tests\Fixtures\InfoArrayable;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\ProductDto;
+
+use function is_a;
+use function sprintf;
 
 class DtoTest extends TestCase
 {
@@ -41,6 +48,46 @@ class DtoTest extends TestCase
 
     /**
      * @group ok
+     * @dataProvider dpArrayableData
+     */
+    public function testGetArrayableValueSuccess(array | Arrayable $info): void
+    {
+        $data = [
+            'price' => 999,
+            'type' => 'ticket',
+            'available' => true,
+        ];
+
+        $data += ['info' => $info];
+
+        $dto = new ProductDto($data);
+
+        $expected = is_a($info, Arrayable::class) ? $info->toArray() : $info;
+
+        $this->assertEquals($expected, $dto->getInfo());
+    }
+
+    public function dpArrayableData(): array
+    {
+        return [
+            [
+                [
+
+                ],
+            ],
+            [
+                [
+                    'key' => 'value',
+                ],
+            ],
+            [
+                new InfoArrayable(),
+            ],
+        ];
+    }
+
+    /**
+     * @group ok
      * @dataProvider dpInvalidGetters
      */
     public function testGetInvalidValueThrowsException(string $getter, string $property): void
@@ -51,9 +98,6 @@ class DtoTest extends TestCase
         $this->dto->$getter();
     }
 
-    /**
-     * @return string[][]
-     */
     public function dpInvalidGetters(): array
     {
         return [
@@ -167,6 +211,96 @@ class DtoTest extends TestCase
                 true,
                 // phpcs:ignore
                 'Dto: Tests\Fixtures\ProductDto | Property: info | Expected type: array | Given type: boolean | Value: true',
+            ],
+        ];
+    }
+
+    /**
+     * @throws DtoException
+     *
+     * @group ok
+     * @dataProvider dpIncompleteData
+     */
+    public function testSetIncompleteDataThrowsInputDataException(array $data, string $property): void
+    {
+        $this->expectException(InputDataException::class);
+        $this->expectExceptionMessage(
+            sprintf('Dto: Tests\Fixtures\ProductDto | Property: %s | Err: No data', $property),
+        );
+        $this->expectExceptionCode(202);
+        new ProductDto($data);
+    }
+
+    public function dpIncompleteData(): array
+    {
+        return [
+            [
+                [
+                    'price' => 999,
+                    'type' => 'ticket',
+                    'available' => true,
+                ],
+                'info',
+            ],
+            [
+                [
+                    'type' => 'ticket',
+                    'price' => 999,
+                    'available' => true,
+                ],
+                'info',
+            ],
+            [
+                [
+                    'type' => 'ticket',
+                    'available' => true,
+                ],
+                'price',
+            ],
+            [
+                [
+                    'available' => true,
+                ],
+                'price',
+            ],
+        ];
+    }
+
+    /**
+     * @throws GetValueException
+     *
+     * @group ok
+     * @dataProvider dpInvalidMethod
+     */
+    public function testInvalidMethodsThrowsDtoException(string $method, mixed $argument = null): void
+    {
+        $this->expectException(GetValueException::class);
+        $this->expectExceptionMessage(
+            sprintf('Dto: Tests\Fixtures\PersonDto | Unexpected method: %s', $method),
+        );
+        $this->expectExceptionCode(301);
+
+        $this->dto->{$method}($argument);
+    }
+
+    public function dpInvalidMethod(): array
+    {
+        return [
+            [
+                'get',
+                5,
+            ],
+            [
+                'delete',
+            ],
+            [
+                'setValue',
+                'random string',
+            ],
+            [
+                'value',
+                new class {
+                },
             ],
         ];
     }

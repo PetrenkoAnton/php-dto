@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\InitDtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\WithNoBackedEnumDto;
@@ -12,7 +11,7 @@ use Tests\Fixtures\WithNoBackedEnumDto;
 class NoBackedEnumDtoTest extends TestCase
 {
     /**
-     * @throws DtoException
+     * @throws InitDtoException
      *
      * @group ok
      */

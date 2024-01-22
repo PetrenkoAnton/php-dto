@@ -24,7 +24,7 @@ class UnsupportedDtoTest extends TestCase
     }
 
     /**
-     * @throws DtoException
+     * @throws InitDtoException
      *
      * @group ok
      */
@@ -33,14 +33,14 @@ class UnsupportedDtoTest extends TestCase
         $this->expectException(InitDtoException::class);
         $this->expectExceptionMessage(
             // phpcs:ignore
-            'Dto: Tests\Fixtures\Unsupported\NoDeclarationDto | Property: name | Err: Mission property type declaration',
+            'Dto: Tests\Fixtures\Unsupported\NoDeclarationDto | Property: name | Err: Missed property type declaration',
         );
         $this->expectExceptionCode(101);
         new NoDeclarationDto($this->data);
     }
 
     /**
-     * @throws DtoException
+     * @throws InitDtoException
      *
      * @group ok
      */
@@ -56,7 +56,7 @@ class UnsupportedDtoTest extends TestCase
     }
 
     /**
-     * @throws DtoException
+     * @throws InitDtoException
      *
      * @group ok
      */
@@ -88,7 +88,7 @@ class UnsupportedDtoTest extends TestCase
     }
 
     /**
-     * @throws DtoException
+     * @throws InitDtoException
      *
      * @group ok
      */
