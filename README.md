@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/packagist/l/petrenkoanton/php-dto)](https://packagist.org/packages/petrenkoanton/php-dto)
 
 [![PHP Composer](https://github.com/petrenkoanton/php-dto/actions/workflows/tests.yml/badge.svg)](https://github.com/petrenkoanton/php-dto/actions/workflows/tests.yml)
-[![Coverage Status](https://coveralls.io/repos/github/PetrenkoAnton/php-dto/badge.svg)](https://coveralls.io/github/PetrenkoAnton/php-dto)
+[![Coverage Status](https://coveralls.io/repos/github/PetrenkoAnton/php-dto/badge.svg?branch=main)](https://coveralls.io/github/PetrenkoAnton/php-dto?branch=main)
 [![type-coverage](https://shepherd.dev/github/petrenkoanton/php-dto/coverage.svg)](https://shepherd.dev/github/petrenkoanton/php-dto)
 [![psalm-level](https://shepherd.dev/github/petrenkoanton/php-dto/level.svg)](https://shepherd.dev/github/petrenkoanton/php-dto)
 [![Build Status](https://github.com/petrenkoanton/php-dto/workflows/coding-style/badge.svg)](https://github.com/petrenkoanton/php-dto/actions)
