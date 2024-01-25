@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Fixtures\Unsupported;
 
-use Collection\Collectable;
 use Dto\DtoCollection;
 
 class InvalidContructorDtoCollection extends DtoCollection

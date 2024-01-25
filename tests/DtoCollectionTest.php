@@ -10,14 +10,11 @@ use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\InitDtoException\DtoCollectionConstructorException;
 use Dto\Exception\DtoException\SetupDtoException;
 use PHPUnit\Framework\TestCase;
-use Tests\Fixtures\Unsupported\EmptyClassDto;
-use Tests\Fixtures\Unsupported\InvalidContructorCollectionDtoCollection;
-use Tests\Fixtures\Unsupported\InvalidContructorDtoCollection;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\PersonDtoCollection;
 use Tests\Fixtures\ProductDto;
-use Tests\Fixtures\Unsupported\RandomClass;
-use Tests\Fixtures\Unsupported\RandomClassDeclarationDto;
+use Tests\Fixtures\Unsupported\EmptyClassDto;
+use Tests\Fixtures\Unsupported\InvalidContructorDtoCollection;
 
 class DtoCollectionTest extends TestCase
 {
