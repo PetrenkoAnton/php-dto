@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e40badeeae553a85f24957cb96e9c0c",
+    "content-hash": "5abe8febbc82f02ad890accd90b78452",
     "packages": [
         {
             "name": "petrenkoanton/php-collection",
-            "version": "v1.0.4",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PetrenkoAnton/php-collection.git",
-                "reference": "9d63f8638791a60066cd7bdbd084aa23fc11255f"
+                "reference": "af2876de1e07684a287071d373bebd5b15113547"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PetrenkoAnton/php-collection/zipball/9d63f8638791a60066cd7bdbd084aa23fc11255f",
-                "reference": "9d63f8638791a60066cd7bdbd084aa23fc11255f",
+                "url": "https://api.github.com/repos/PetrenkoAnton/php-collection/zipball/af2876de1e07684a287071d373bebd5b15113547",
+                "reference": "af2876de1e07684a287071d373bebd5b15113547",
                 "shasum": ""
             },
             "require": {
@@ -56,9 +56,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PetrenkoAnton/php-collection/issues",
-                "source": "https://github.com/PetrenkoAnton/php-collection/tree/v1.0.4"
+                "source": "https://github.com/PetrenkoAnton/php-collection/tree/v1.1.0"
             },
-            "time": "2024-01-17T14:00:44+00:00"
+            "time": "2024-01-23T22:29:50+00:00"
         }
     ],
     "packages-dev": [

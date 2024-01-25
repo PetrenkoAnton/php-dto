@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Test;
 
 use Collection\Exception\CollectionException;
-use Collection\Exception\CollectionException\InvalidKeyCollectionException;
+use Collection\Exception\CollectionException\InvalidKeyException;
 use Dto\Exception\DtoException;
+use Dto\Exception\DtoException\InitDtoException\DtoCollectionConstructorException;
 use Dto\Exception\DtoException\SetupDtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\PersonDtoCollection;
 use Tests\Fixtures\ProductDto;
+use Tests\Fixtures\Unsupported\EmptyClassDto;
+use Tests\Fixtures\Unsupported\InvalidContructorDtoCollection;
 
 class DtoCollectionTest extends TestCase
 {
@@ -107,7 +110,7 @@ class DtoCollectionTest extends TestCase
      */
     public function testGetMethodThrowsInvalidKeyCollectionException(int $key): void
     {
-        $this->expectException(InvalidKeyCollectionException::class);
+        $this->expectException(InvalidKeyException::class);
         $this->expectExceptionMessage("Collection: Tests\Fixtures\PersonDtoCollection | Invalid key: $key");
         $this->expectExceptionCode(200);
         $this->dtoCollection->getItem($key);
@@ -127,7 +130,6 @@ class DtoCollectionTest extends TestCase
 
     /**
      * @throws DtoException
-     * @throws CollectionException
      *
      * @group ok
      */
@@ -152,5 +154,21 @@ class DtoCollectionTest extends TestCase
         $this->expectExceptionMessage('DtoCollection: Tests\Fixtures\PersonDtoCollection | Expected Dto: Tests\Fixtures\PersonDto | Given Dto: Tests\Fixtures\ProductDto');
         $this->expectExceptionCode(201);
         $dtoCollection->add($productDto);
+    }
+
+    /**
+     * @throws DtoCollectionConstructorException
+     *
+     * @group ok
+     */
+    public function testAddMethodThrowsDtoCollectionConstructorException(): void
+    {
+        $this->expectException(DtoCollectionConstructorException::class);
+        // phpcs:ignore
+        $this->expectExceptionMessage('DtoCollection: Tests\Fixtures\Unsupported\InvalidContructorDtoCollection | Err: Invalid constructor declaration');
+        $this->expectExceptionCode(107);
+
+        $dtoCollection = new InvalidContructorDtoCollection(1);
+        $dtoCollection->add(new EmptyClassDto([]));
     }
 }

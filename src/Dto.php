@@ -6,6 +6,7 @@ namespace Dto;
 
 use Collection\Arrayable;
 use Collection\Collectable;
+use Collection\Helper;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\HandleDtoException\GetValueException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException;
@@ -83,7 +84,7 @@ abstract class Dto implements Arrayable, Collectable
                 );
             } catch (EnumNoBackingValueException $e) {
                 throw $e;
-            } catch (Throwable) {
+            } catch (Throwable $e) {
                 throw new SetValueException(
                     dto: $this::class,
                     property: $name,
@@ -247,9 +248,6 @@ abstract class Dto implements Arrayable, Collectable
         $this->{$propertyName} = $value;
     }
 
-    /**
-     * @throws ReflectionException
-     */
     private function setDtoCollectionType(string $typeName, string $propertyName, array $values): void
     {
         $collection = new $typeName();
