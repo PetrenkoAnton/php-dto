@@ -7,7 +7,11 @@ namespace Dto;
 use Collection\Collectable;
 use Collection\Collection;
 use Collection\Exception\CollectionException;
-use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
+use Collection\Helper;
+use Collection\Exception\CollectionException\InvalidConstructorDeclarationException;
+use Collection\Exception\CollectionException\InvalidItemTypeException;
+use Dto\Exception\DtoException;
+use Dto\Exception\DtoException\InitDtoException\DtoCollectionConstructorException;
 use Dto\Exception\DtoException\SetupDtoException\AddDtoException;
 use ReflectionException;
 
@@ -19,18 +23,16 @@ abstract class DtoCollection extends Collection
     }
 
     /**
-     * @throws CollectionException
-     * @throws AddDtoException
-     * @throws ReflectionException
+     * @throws DtoException
      */
     public function add(Collectable $item): void
     {
         try {
             parent::add($item);
-        } catch (InvalidItemTypeCollectionException) {
-            $expectedDto = Helper::getConstructorFirstParameterClassName($this);
-
-            throw new AddDtoException($this::class, $expectedDto, $item::class);
+        } catch (InvalidItemTypeException) {
+            throw new AddDtoException($this::class, Helper::getConstructorFirstParameterClassName($this), $item::class);
+        } catch (InvalidConstructorDeclarationException) {
+            throw new DtoCollectionConstructorException($this::class);
         }
     }
 }

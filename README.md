@@ -73,7 +73,7 @@ HandleDtoException
 | 104  | Dto: %s &#124; Property: %s &#124; Err: Unsupported object property type declaration                          | ObjectDeclarationException        | InitDtoException   |
 | 105  | Dto: %s &#124; Property: %s &#124; Err: Class must implement DtoInterface                                     | NotDtoClassDeclarationException   | InitDtoException   |
 | 106  | Dto: %s &#124; Property: %s &#124; Err: No backing value for enum                                             | EnumNoBackingValueException       | InitDtoException   |
-| 107  | DtoCollection: %s &#124 Err: Invalid constructor declaration                                                  | DtoCollectionConstructorException | InitDtoException   |
+| 107  | DtoCollection: %s &#124; Err: Invalid constructor declaration                                                 | DtoCollectionConstructorException | InitDtoException   |
 | 201  | DtoCollection: %s &#124; Expected Dto: %s &#124; Given Dto: %s                                                | AddDtoException                   | SetupDtoException  |
 | 202  | Dto: %s &#124; Property: %s &#124; Err: No data                                                               | InputDataException                | SetupDtoException  |
 | 203  | Dto: %s &#124; Property: %s &#124; Expected type: %s &#124; Given type: %s &#124; Value: %s                   | SetValueException                 | SetupDtoException  |
@@ -112,7 +112,7 @@ class ProductDto extends Dto
     protected bool $available;
 }
 
-// Array or instance of Arrayable interface:
+// Array or instance of Arrayable interface
 $info = [
     'key' => 'value',
 ];
