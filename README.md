@@ -60,7 +60,7 @@ All getters are provided using the `__call()` magic method.
 
 ### Exceptions
 
-Main library exception is [DtoException](./src/Exception/DtoException.php). 
+Main library exception is [DtoException](./src/Exception/DtoException.php).
 
 There are [3 groups of exceptions](./src/Exception/DtoException): InitDtoException, SetupDtoException and 
 HandleDtoException
@@ -336,8 +336,7 @@ composer check-all
 
 ## License
 
-The [php-dto](https://github.com/PetrenkoAnton/php-dto/) library is open-sourced software licensed under the 
-[MIT license](https://opensource.org/licenses/MIT).
+The [php-dto](https://github.com/PetrenkoAnton/php-dto/) library is open-sourced software licensed under the [MIT license](./LICENSE).
 
 ## Related projects
 
