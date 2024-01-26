@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "petrenkoanton/php-collection",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PetrenkoAnton/php-collection.git",
-                "reference": "39cd7830746a143b14d013a6c1b52884e03ad82c"
+                "reference": "05ede9a4cda04045352df24e0755cacb703a7f98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PetrenkoAnton/php-collection/zipball/39cd7830746a143b14d013a6c1b52884e03ad82c",
-                "reference": "39cd7830746a143b14d013a6c1b52884e03ad82c",
+                "url": "https://api.github.com/repos/PetrenkoAnton/php-collection/zipball/05ede9a4cda04045352df24e0755cacb703a7f98",
+                "reference": "05ede9a4cda04045352df24e0755cacb703a7f98",
                 "shasum": ""
             },
             "require": {
@@ -56,9 +56,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PetrenkoAnton/php-collection/issues",
-                "source": "https://github.com/PetrenkoAnton/php-collection/tree/v1.1.1"
+                "source": "https://github.com/PetrenkoAnton/php-collection/tree/v1.1.2"
             },
-            "time": "2024-01-26T18:34:06+00:00"
+            "time": "2024-01-26T19:55:35+00:00"
         }
     ],
     "packages-dev": [
