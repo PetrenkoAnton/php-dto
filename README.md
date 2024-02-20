@@ -254,6 +254,36 @@ $color = $nestedDto->getColor(); // ColorEnum::Red
 $colorValue = $colorEnum->value; // 'red'
 ```
 
+#### Return DTO as array
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Dto\Dto;
+
+/**
+ * @method int getActualNumber()
+ * @method string getProviderName()
+ */
+class SnakeCaseDto extends Dto
+{
+    protected int $actualNumber;
+    protected string $providerName;
+}
+
+$data = [
+    'actualNumber' => 5,
+    'providerName' => 'Main Provider',
+];
+
+$dto = new SnakeCaseDto($data);
+
+$array = $dto->toArray(); // ['actualNumber' => 5, 'providerName' => 'Main Provider']
+$arrayWithSnakeCaseKeys = $dto->toArray(rawKeys: false); // ['actual_number' => 5, 'provider_name' => 'Main Provider']
+```
+
 ## For developers
 
 ### Requirements

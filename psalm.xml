@@ -20,7 +20,7 @@
         <directory name="./tests" useStrictTypes="true"/>
         <ignoreFiles>
             <directory name="./vendor"/>
-            <directory name="./tests/output"/>
+            <directory name="./tests/_output"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>

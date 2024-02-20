@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5abe8febbc82f02ad890accd90b78452",
+    "content-hash": "d70aa36a4d41dae6fc219b00760e843e",
     "packages": [
+        {
+            "name": "petrenkoanton/key-normalizer",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PetrenkoAnton/key-normalizer.git",
+                "reference": "ed0442d85c04501689d4a113b0775574b6684374"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PetrenkoAnton/key-normalizer/zipball/ed0442d85c04501689d4a113b0775574b6684374",
+                "reference": "ed0442d85c04501689d4a113b0775574b6684374",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.7",
+                "phpunit/phpunit": "^9.0",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "ramsey/coding-standard": "^2.1",
+                "squizlabs/php_codesniffer": "^3.8",
+                "vimeo/psalm": "^5.16"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "KeyNormalizer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Petrenko",
+                    "email": "antptrnk@gmail.com",
+                    "homepage": "https://github.com/petrenkoanton",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Converts snake_case to camelCase and vice versa",
+            "keywords": [
+                "camel case",
+                "helper",
+                "snake case"
+            ],
+            "support": {
+                "issues": "https://github.com/PetrenkoAnton/key-normalizer/issues",
+                "source": "https://github.com/PetrenkoAnton/key-normalizer/tree/v2.0.0"
+            },
+            "time": "2024-02-20T14:29:47+00:00"
+        },
         {
             "name": "petrenkoanton/php-collection",
             "version": "v1.1.2",
