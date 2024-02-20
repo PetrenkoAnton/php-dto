@@ -8,10 +8,12 @@ use Collection\Arrayable;
 use Dto\Exception\DtoException;
 use Dto\Exception\DtoException\HandleDtoException\GetValueException;
 use Dto\Exception\DtoException\SetupDtoException\InputDataException;
+use Dto\KeyCase;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\InfoArrayable;
 use Tests\Fixtures\PersonDto;
 use Tests\Fixtures\ProductDto;
+use Tests\Fixtures\SnakeCaseNestedDto;
 
 use function is_a;
 use function sprintf;
@@ -301,6 +303,56 @@ class DtoTest extends TestCase
                 'value',
                 new class {
                 },
+            ],
+        ];
+    }
+
+    /**
+     * @group +
+     * @dataProvider dpTestToArray
+     */
+    public function testToArray(KeyCase $keyCase, array $expected): void
+    {
+        $data = [
+            'snakeCase' => [
+                'actualNumber' => 5,
+                'listInfo' => ['First random string', 'Second random string'],
+                'infoArrayable' => new InfoArrayable(),
+            ],
+            'actualNumber' => 10,
+            'providerName' => 'Main provider',
+        ];
+
+        $dto = new SnakeCaseNestedDto($data);
+        $this->assertEquals($expected, $dto->toArray($keyCase));
+    }
+
+    public static function dpTestToArray(): array
+    {
+        return [
+            [
+                KeyCase::CAMEL_CASE,
+                [
+                    'snakeCase' => [
+                        'actualNumber' => 5,
+                        'listInfo' => ['First random string', 'Second random string'],
+                        'infoArrayable' => ['camelCaseKey' => 'value'],
+                    ],
+                    'actualNumber' => 10,
+                    'providerName' => 'Main provider',
+                ],
+            ],
+            [
+                KeyCase::SNAKE_CASE,
+                [
+                    'snake_case' => [
+                        'actual_number' => 5,
+                        'list_info' => ['First random string', 'Second random string'],
+                        'info_arrayable' => ['camelCaseKey' => 'value'],
+                    ],
+                    'actual_number' => 10,
+                    'provider_name' => 'Main provider',
+                ],
             ],
         ];
     }

@@ -32,7 +32,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Run tests with coverage results
-        run: vendor/bin/phpunit --coverage-clover ./tests/output/clover.xml
+        run: vendor/bin/phpunit --coverage-clover ./tests/_output/clover.xml
 
       - name: Upload coverage results to Coveralls
         env:
@@ -41,7 +41,7 @@ jobs:
           COVERALLS_FLAG_NAME: ${{ matrix.php }}
         run: |
           composer require php-coveralls/php-coveralls -n
-          vendor/bin/php-coveralls --coverage_clover=./tests/output/clover.xml -v --json_path=./tests/output/coveralls-upload.json
+          vendor/bin/php-coveralls --coverage_clover=./tests/_output/clover.xml -v --json_path=./tests/_output/coveralls-upload.json
   finish:
     name: Close parallel build
     needs: tests

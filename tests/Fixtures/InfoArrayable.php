@@ -10,6 +10,6 @@ class InfoArrayable implements Arrayable
 {
     public function toArray(): array
     {
-        return ['key' => 'value'];
+        return ['camelCaseKey' => 'value'];
     }
 }

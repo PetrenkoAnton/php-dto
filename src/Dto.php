@@ -22,6 +22,7 @@ use Dto\Exception\DtoException\SetupDtoException\SetValueException;
 use Dto\Exception\Internal\EnumBackingValueException;
 use Error;
 use InvalidArgumentException;
+use KeyNormalizer\KeyNormalizer;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
@@ -112,7 +113,7 @@ abstract class Dto implements Arrayable, Collectable
         return $this->{$property};
     }
 
-    public function toArray(): array
+    public function toArray(KeyCase $keyCase = KeyCase::CAMEL_CASE): array
     {
         $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED);
 
@@ -123,8 +124,13 @@ abstract class Dto implements Arrayable, Collectable
             $property->setAccessible(true);
             $value = $property->getValue($this);
 
-            $data[$property->getName()] = is_a($value, Arrayable::class)
-                ? $value->toArray()
+            $key = match ($keyCase) {
+                KeyCase::SNAKE_CASE => KeyNormalizer::toSnakeCase($property->getName()),
+                KeyCase::CAMEL_CASE => $property->getName(),
+            };
+
+            $data[$key] = is_a($value, Arrayable::class)
+                ? is_a($value, self::class) ? $value->toArray($keyCase) : $value->toArray()
                 : $value;
         }
 
