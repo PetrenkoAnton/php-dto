@@ -370,4 +370,5 @@ The [php-dto](https://github.com/PetrenkoAnton/php-dto/) library is open-sourced
 
 ## Related projects
 
+- [PetrenkoAnton/key-normalizer](https://github.com/PetrenkoAnton/key-normalizer)
 - [PetrenkoAnton/php-collection](https://github.com/PetrenkoAnton/php-collection)
