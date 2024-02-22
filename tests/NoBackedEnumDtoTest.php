@@ -20,7 +20,7 @@ class NoBackedEnumDtoTest extends TestCase
         $this->expectException(InitDtoException::class);
         // phpcs:ignore
         $this->expectExceptionMessage('Dto: Tests\Fixtures\WithNoBackedEnumDto | Property: color | Err: No backing value for enum');
-        $this->expectExceptionCode(106);
+        $this->expectExceptionCode(105);
         new WithNoBackedEnumDto(['color' => 'red']);
     }
 }
