@@ -261,6 +261,7 @@ $colorValue = $colorEnum->value; // 'red'
 declare(strict_types=1);
 
 use Dto\Dto;
+use Dto\KeyCase;
 
 /**
  * @method int getActualNumber()
