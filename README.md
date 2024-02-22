@@ -280,7 +280,7 @@ $data = [
 $dto = new SnakeCaseDto($data);
 
 $array = $dto->toArray(); // ['actualNumber' => 5, 'providerName' => 'Main Provider']
-$arrayWithSnakeCaseKeys = $dto->toArray(rawKeys: false); // ['actual_number' => 5, 'provider_name' => 'Main Provider']
+$arrayWithSnakeCaseKeys = $dto->toArray(KeyCase::SNAKE_CASE); // ['actual_number' => 5, 'provider_name' => 'Main Provider']
 ```
 
 ## For developers
