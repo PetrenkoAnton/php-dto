@@ -308,7 +308,7 @@ class DtoTest extends TestCase
     }
 
     /**
-     * @group +
+     * @group ok
      * @dataProvider dpTestToArray
      */
     public function testToArray(KeyCase $keyCase, array $expected): void

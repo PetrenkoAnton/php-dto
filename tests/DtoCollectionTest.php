@@ -166,7 +166,7 @@ class DtoCollectionTest extends TestCase
         $this->expectException(DtoCollectionConstructorException::class);
         // phpcs:ignore
         $this->expectExceptionMessage('DtoCollection: Tests\Fixtures\Unsupported\InvalidContructorDtoCollection | Err: Invalid constructor declaration');
-        $this->expectExceptionCode(107);
+        $this->expectExceptionCode(106);
 
         $dtoCollection = new InvalidContructorDtoCollection(1);
         $dtoCollection->add(new EmptyClassDto([]));

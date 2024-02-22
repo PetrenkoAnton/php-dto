@@ -14,7 +14,6 @@ use Dto\Exception\DtoException\InitDtoException\DeclarationException\EnumNoBacki
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\MixedDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NoTypeDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\NotDtoClassDeclarationException;
-use Dto\Exception\DtoException\InitDtoException\DeclarationException\NullableDeclarationException;
 use Dto\Exception\DtoException\InitDtoException\DeclarationException\ObjectDeclarationException;
 use Dto\Exception\DtoException\SetupDtoException\InputDataException;
 use Dto\Exception\DtoException\SetupDtoException\SetValueEnumException;
@@ -36,6 +35,7 @@ use function gettype;
 use function implode;
 use function is_a;
 use function is_array;
+use function is_null;
 use function is_subclass_of;
 use function key_exists;
 use function lcfirst;
@@ -155,10 +155,6 @@ abstract class Dto implements Arrayable, Collectable
             throw new MixedDeclarationException($this::class, $name);
         }
 
-        if ($type->allowsNull()) {
-            throw new NullableDeclarationException($this::class, $name);
-        }
-
         if ($type->getName() === 'object') {
             throw new ObjectDeclarationException($this::class, $name);
         }
@@ -215,11 +211,17 @@ abstract class Dto implements Arrayable, Collectable
      */
     private function setValue(ReflectionNamedType $propertyType, string $propertyName, mixed $value): void
     {
-        $typeName = $propertyType->getName();
+        if (is_null($value) && $propertyType->allowsNull()) {
+            $this->{$propertyName} = null;
+
+            return;
+        }
 
         if (is_a($value, Arrayable::class)) {
             $value = $value->toArray();
         }
+
+        $typeName = $propertyType->getName();
 
         if ($propertyType->isBuiltin()) {
             $this->setBuiltinType($typeName, $propertyName, $value);

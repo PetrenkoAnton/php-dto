@@ -10,12 +10,11 @@ class DtoException extends Exception
 {
     // INIT
     protected const NO_TYPE_DECLARATION_CODE = 101;
-    protected const NULLABLE_DECLARATION_CODE = 102;
-    protected const MIXED_DECLARATION_CODE = 103;
-    protected const OBJECT_DECLARATION_CODE = 104;
-    protected const NOT_DTO_CLASS_DECLARATION_CODE = 105;
-    protected const ENUM_NO_BACKING_VALUE_CODE = 106;
-    protected const INVALID_DTO_COLLECTION_CONSTRUCTOR_CODE = 107;
+    protected const MIXED_DECLARATION_CODE = 102;
+    protected const OBJECT_DECLARATION_CODE = 103;
+    protected const NOT_DTO_CLASS_DECLARATION_CODE = 104;
+    protected const ENUM_NO_BACKING_VALUE_CODE = 105;
+    protected const INVALID_DTO_COLLECTION_CONSTRUCTOR_CODE = 106;
     // SETUP
     protected const ADD_DTO_EXCEPTION = 201;
     protected const EMPTY_INPUT_DATA_CODE = 202;

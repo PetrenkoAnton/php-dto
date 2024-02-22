@@ -9,7 +9,6 @@ use Dto\Exception\DtoException\InitDtoException;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\Unsupported\MixedDeclarationDto;
 use Tests\Fixtures\Unsupported\NoDeclarationDto;
-use Tests\Fixtures\Unsupported\NullableDeclarationDto;
 use Tests\Fixtures\Unsupported\ObjectDeclarationDto;
 use Tests\Fixtures\Unsupported\RandomClass;
 use Tests\Fixtures\Unsupported\RandomClassDeclarationDto;
@@ -51,24 +50,8 @@ class UnsupportedDtoTest extends TestCase
             // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\MixedDeclarationDto | Property: name | Err: Unsupported mixed property type declaration',
         );
-        $this->expectExceptionCode(103);
-        new MixedDeclarationDto($this->data);
-    }
-
-    /**
-     * @throws InitDtoException
-     *
-     * @group ok
-     */
-    public function testNullablePropertyTypeDeclarationThrowsException(): void
-    {
-        $this->expectException(InitDtoException::class);
-        $this->expectExceptionMessage(
-            // phpcs:ignore
-            'Dto: Tests\Fixtures\Unsupported\NullableDeclarationDto | Property: name | Err: Unsupported nullable property type declaration',
-        );
         $this->expectExceptionCode(102);
-        new NullableDeclarationDto($this->data);
+        new MixedDeclarationDto($this->data);
     }
 
     /**
@@ -83,7 +66,7 @@ class UnsupportedDtoTest extends TestCase
             // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\ObjectDeclarationDto | Property: name | Err: Unsupported object property type declaration',
         );
-        $this->expectExceptionCode(104);
+        $this->expectExceptionCode(103);
         new ObjectDeclarationDto($this->data);
     }
 
@@ -99,7 +82,7 @@ class UnsupportedDtoTest extends TestCase
             // phpcs:ignore
             'Dto: Tests\Fixtures\Unsupported\RandomClassDeclarationDto | Property: name | Err: Class must implement DtoInterface',
         );
-        $this->expectExceptionCode(105);
+        $this->expectExceptionCode(104);
         new RandomClassDeclarationDto(['name' => new RandomClass()]);
     }
 }
