@@ -14,6 +14,6 @@ use Dto\Dto;
  */
 class NestedNullableDto extends Dto
 {
-    protected string $type;
+    protected ?string $type;
     protected ?ErrorDto $error;
 }
